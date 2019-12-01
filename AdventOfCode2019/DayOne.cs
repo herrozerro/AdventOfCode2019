@@ -119,13 +119,6 @@ namespace AdventOfCode2019
             return (int)fuel;
         }
 
-        public static int GetFuelForModule2(int componentMass)
-        {
-            var fuel = (componentMass / 3) - 2;
-
-            return fuel;
-        }
-
         public static int GetAllFuel(int mass)
         {
             var fuelformass = GetFuelForModule(mass);
