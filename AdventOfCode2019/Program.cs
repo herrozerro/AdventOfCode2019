@@ -8,6 +8,7 @@ namespace AdventOfCode2019
         {
             Day01.RunDay();
             Day02.RunDay();
+            Day02.RunAllComobos();
             Day03.RunDay();
             Day04.RunDay();
             Day05.RunDay();
