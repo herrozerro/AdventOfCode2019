@@ -4,8 +4,29 @@ using System.Text;
 
 namespace AdventOfCode2019
 {
-    public static class DayOne
+    public static class Day01
     {
+        public static void RunDay()
+        {
+            var FuelForComponents = 0;
+            var FuelForWholeRocket = 0;
+
+            foreach (var component in Day01.Inputs)
+            {
+                FuelForComponents += Day01.GetFuelForModule(component);
+            }
+
+            foreach (var component in Day01.Inputs)
+            {
+                FuelForWholeRocket += Day01.GetAllFuel(component);
+            }
+            Console.WriteLine("Day 1");
+            Console.WriteLine($"Part 1, Fuel for rocket: {FuelForComponents}");
+            Console.WriteLine($"Part 2, Fuel for whole rocket + fuel: {FuelForWholeRocket}");
+            Console.WriteLine("**************");
+            Console.WriteLine(Environment.NewLine);
+        }
+
 
         public static List<int> Inputs = new List<int>()
         {

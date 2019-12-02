@@ -3,7 +3,7 @@ using NUnit.Framework;
 
 namespace AdventOfCode2019Tests
 {
-    public class DayOneTests
+    public class Day01Tests
     {
         [SetUp]
         public void Setup()
@@ -15,7 +15,7 @@ namespace AdventOfCode2019Tests
         {
             var component = 100756;
 
-            var fuel = DayOne.GetFuelForModule(component);
+            var fuel = Day01.GetFuelForModule(component);
 
             Assert.AreEqual(33583, fuel);
         }
@@ -25,7 +25,7 @@ namespace AdventOfCode2019Tests
         {
             var component = 100756;
 
-            var fuel = DayOne.GetAllFuel(component);
+            var fuel = Day01.GetAllFuel(component);
 
             Assert.AreEqual(50346, fuel);
         }
