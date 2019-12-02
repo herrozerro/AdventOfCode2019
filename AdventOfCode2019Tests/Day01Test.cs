@@ -25,7 +25,7 @@ namespace AdventOfCode2019Tests
         {
             var component = 100756;
 
-            var fuel = Day01.GetAllFuel(component);
+            var fuel = Day01.GetAllFuelRecursivly(component);
 
             Assert.AreEqual(50346, fuel);
         }

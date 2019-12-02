@@ -11,14 +11,14 @@ namespace AdventOfCode2019
             var FuelForComponents = 0;
             var FuelForWholeRocket = 0;
 
-            foreach (var component in Day01.Inputs)
+            foreach (var component in Inputs)
             {
-                FuelForComponents += Day01.GetFuelForModule(component);
+                FuelForComponents += GetFuelForModule(component);
             }
 
-            foreach (var component in Day01.Inputs)
+            foreach (var component in Inputs)
             {
-                FuelForWholeRocket += Day01.GetAllFuel(component);
+                FuelForWholeRocket += GetAllFuelRecursivly(component);
             }
             Console.WriteLine("Day 1");
             Console.WriteLine($"Part 1, Fuel for rocket: {FuelForComponents}");
@@ -140,7 +140,7 @@ namespace AdventOfCode2019
             return (int)fuel;
         }
 
-        public static int GetAllFuel(int mass)
+        public static int GetAllFuelRecursivly(int mass)
         {
             var fuelformass = GetFuelForModule(mass);
 
@@ -149,7 +149,7 @@ namespace AdventOfCode2019
                 return 0;
             }
 
-            return fuelformass + GetAllFuel(fuelformass);
+            return fuelformass + GetAllFuelRecursivly(fuelformass);
         }
 
     }
