@@ -34,13 +34,9 @@ namespace AdventOfCode2019
             }
             var ms1 = matchlist.OrderBy(x => x.Value).ToList();
 
-
             Console.WriteLine("**************");
             Console.WriteLine(Environment.NewLine);
         }
-
-
-        
     }
 
     public class Circuit
@@ -80,8 +76,6 @@ namespace AdventOfCode2019
                         }
                         break;
                 }
-
-
             }
         }
     }
