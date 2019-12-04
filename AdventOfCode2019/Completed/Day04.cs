@@ -14,9 +14,12 @@ namespace AdventOfCode2019
             var lines = Program.GetStringFromFile("Day4.txt");
 
             var passwords2 = ParsePasswords(new List<string>() { "112233", "123444", "111122" });
-            var passwords = ParsePasswords(GeneratePasswords(lines));
-
-
+            var passwords = ParsePasswordsP1(GeneratePasswords(lines));
+            Console.WriteLine($" Part 1 Password Count: {passwords.Count()}");
+            
+            passwords = ParsePasswordsP2(GeneratePasswords(lines));
+            Console.WriteLine($" Part 2 Password Count: {passwords.Count()}");
+            
             Console.WriteLine("**************");
             Console.WriteLine(Environment.NewLine);
         }
@@ -29,8 +32,56 @@ namespace AdventOfCode2019
 
             return allRanges;
         }
+        
+        public static List<string> ParsePasswordsP1(List<string> passwords)
+        {
+            var passedPasswords = new List<string>();
 
-        public static List<string> ParsePasswords(List<string> passwords)
+            var doubledigets = new List<string>()
+            {
+                "00",
+                "11",
+                "22",
+                "33",
+                "44",
+                "55",
+                "66",
+                "77",
+                "88",
+                "99"
+            };
+
+            foreach (var item in passwords)
+            {
+
+                if (doubledigets.Any(s => item.Contains(s)))
+                {
+                    bool isbad = false;
+                    int character = int.Parse(item[0].ToString());
+                    foreach (var c in item.Skip(1))
+                    {
+                        if (int.Parse(c.ToString()) >= character)
+                        {
+                            character = int.Parse(c.ToString());
+                        }
+                        else
+                        {
+                            isbad = true;
+                            break;
+                        }
+                    }
+                    if (!isbad)
+                    {
+                        passedPasswords.Add(item);
+                    }
+
+                }
+            }
+
+            return passedPasswords;
+        }
+        
+        public static List<string> ParsePasswordsP2(List<string> passwords)
         {
             var passedPasswords = new List<string>();
 
@@ -83,6 +134,54 @@ namespace AdventOfCode2019
                                 Console.WriteLine(item);
                             }
                         }
+                    }
+
+                }
+            }
+
+            return passedPasswords;
+        }
+        
+        public static List<string> ParsePasswordsP1(List<string> passwords)
+        {
+            var passedPasswords = new List<string>();
+
+            var doubledigets = new List<string>()
+            {
+                "00",
+                "11",
+                "22",
+                "33",
+                "44",
+                "55",
+                "66",
+                "77",
+                "88",
+                "99"
+            };
+
+            foreach (var item in passwords)
+            {
+
+                if (doubledigets.Any(s => item.Contains(s)))
+                {
+                    bool isbad = false;
+                    int character = int.Parse(item[0].ToString());
+                    foreach (var c in item.Skip(1))
+                    {
+                        if (int.Parse(c.ToString()) >= character)
+                        {
+                            character = int.Parse(c.ToString());
+                        }
+                        else
+                        {
+                            isbad = true;
+                            break;
+                        }
+                    }
+                    if (!isbad)
+                    {
+                        passedPasswords.Add(item);
                     }
 
                 }
