@@ -43,6 +43,7 @@ namespace AdventOfCode2019
                     }
                 }
             }
+            return "NOT FOUND";
         }
 
         public static int mysterfunc(int i, int j, string strcode)

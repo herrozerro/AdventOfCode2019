@@ -13,7 +13,7 @@ namespace AdventOfCode2019
 
             var lines = Program.GetStringFromFile("Day4.txt");
 
-            var passwords2 = ParsePasswords(new List<string>() { "112233", "123444", "111122" });
+            var passwords2 = ParsePasswordsP1(new List<string>() { "112233", "123444", "111122" });
             var passwords = ParsePasswordsP1(GeneratePasswords(lines));
             Console.WriteLine($" Part 1 Password Count: {passwords.Count()}");
             
@@ -134,54 +134,6 @@ namespace AdventOfCode2019
                                 Console.WriteLine(item);
                             }
                         }
-                    }
-
-                }
-            }
-
-            return passedPasswords;
-        }
-        
-        public static List<string> ParsePasswordsP1(List<string> passwords)
-        {
-            var passedPasswords = new List<string>();
-
-            var doubledigets = new List<string>()
-            {
-                "00",
-                "11",
-                "22",
-                "33",
-                "44",
-                "55",
-                "66",
-                "77",
-                "88",
-                "99"
-            };
-
-            foreach (var item in passwords)
-            {
-
-                if (doubledigets.Any(s => item.Contains(s)))
-                {
-                    bool isbad = false;
-                    int character = int.Parse(item[0].ToString());
-                    foreach (var c in item.Skip(1))
-                    {
-                        if (int.Parse(c.ToString()) >= character)
-                        {
-                            character = int.Parse(c.ToString());
-                        }
-                        else
-                        {
-                            isbad = true;
-                            break;
-                        }
-                    }
-                    if (!isbad)
-                    {
-                        passedPasswords.Add(item);
                     }
 
                 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace AdventOfCode2019
@@ -11,9 +12,9 @@ namespace AdventOfCode2019
             var FuelForComponents = 0;
             var FuelForWholeRocket = 0;
             
-            var lines = Program.GetLinesFromFile("Day2.txt");
+            var lines = Program.GetStringFromFile("Day2.txt");
             
-            var inputs = Lines.Select<string, int>(int.Parse).ToList();
+            var inputs = lines.Split(',').Select<string, int>(int.Parse).ToList();
             
             foreach (var component in inputs)
             {
