@@ -14,7 +14,7 @@ namespace AdventOfCode2019
 
             Console.WriteLine();
 
-            var lines = Program.GetLinesFromFile("Day3.txt");
+            var lines = Utilities.GetLinesFromFile("Day3.txt");
 
             var circuit1 = new Circuit();
             circuit1.runPath(lines[0].Split(',').ToList());

@@ -11,7 +11,7 @@ namespace AdventOfCode2019
         {
             Console.WriteLine("Day 2");
             
-            var lines = Program.GetStringFromFile("Day2.txt");
+            var lines = Utilities.GetStringFromFile("Day2.txt");
 
             var output = mysterfunc(12,2, lines);
             Console.WriteLine(output);

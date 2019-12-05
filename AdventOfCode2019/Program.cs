@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 
 namespace AdventOfCode2019
 {
@@ -6,10 +7,10 @@ namespace AdventOfCode2019
     {
         static void Main(string[] args)
         {
-            Day01.RunDay();
-            Day02.RunDay();
-            Day03.RunDay();
-            Day04.RunDay();
+            //Day01.RunDay();
+            //Day02.RunDay();
+            //Day03.RunDay();
+            //Day04.RunDay();
             Day05.RunDay();
             //Day06.RunDay();
             //Day07.RunDay();
@@ -34,19 +35,7 @@ namespace AdventOfCode2019
             
         }
 
-        public static string[] GetLinesFromFile(string filename)
-        {
-            var lines = System.IO.File.ReadAllLines("Data\\" + filename);
-
-            return lines;
-        }
-
-        public static string GetStringFromFile(string filename)
-        {
-            var lines = System.IO.File.ReadAllText("Data\\" + filename);
-
-            return lines;
-        }
+        
 
     }
 }

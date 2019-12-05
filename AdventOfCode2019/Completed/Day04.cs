@@ -11,7 +11,7 @@ namespace AdventOfCode2019
         {
             Console.WriteLine("Day 4");
 
-            var lines = Program.GetStringFromFile("Day4.txt");
+            var lines = Utilities.GetStringFromFile("Day4.txt");
 
             var passwords2 = ParsePasswordsP1(new List<string>() { "112233", "123444", "111122" });
             var passwords = ParsePasswordsP1(GeneratePasswords(lines));
