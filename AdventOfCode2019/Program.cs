@@ -8,7 +8,7 @@ namespace AdventOfCode2019
         static void Main(string[] args)
         {
             //Day01.RunDay();
-            //Day02.RunDay();
+            Day02.RunDay();
             //Day03.RunDay();
             //Day04.RunDay();
             Day05.RunDay();

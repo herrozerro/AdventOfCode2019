@@ -28,7 +28,7 @@ namespace AdventOfCode2019
         {
             var ranges = range.Split("-").Select(int.Parse).ToList();
 
-            var allRanges = Enumerable.Range(ranges[0], ranges[1] - ranges[0]).Select(x => x.ToString("000000")).ToList();
+            var allRanges = Enumerable.Range(ranges[0], ranges[1] - ranges[0] + 1).Select(x => x.ToString("000000")).ToList();
 
             return allRanges;
         }

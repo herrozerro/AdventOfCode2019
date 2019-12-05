@@ -30,8 +30,16 @@ namespace AdventOfCode2019
 
     public class IntCodeVM
     {
+        public List<int> outputs = new List<int>();
+
         private int[] program = new int[0];
 
+        public int[] programCode
+        {
+            get { return program; }
+        }
+
+        int input = 1;
 
         public int[] RunProgram(int[] programCode, int input)
         {
@@ -45,42 +53,42 @@ namespace AdventOfCode2019
 
                 parseOpCode(x);
 
-                switch (DE)
+                switch (DE_OpCode)
                 {
-                    case "01":
-                        //Console.WriteLine($"Op1: {DE}, {program[CurrentPositionPointer + 1]}({C_FirstParamMode}), {program[CurrentPositionPointer + 2]}({B_SecondParamMode}), {program[CurrentPositionPointer + 3]}({A_ThirdParamMode})");
+                    case 1:
+                        //Console.WriteLine($"Op1: {DE_OpCode}, {program[CurrentPositionPointer + 1]}({C_FirstParamMode}), {program[CurrentPositionPointer + 2]}({B_SecondParamMode}), {program[CurrentPositionPointer + 3]}({A_ThirdParamMode})");
                         Op1();
                         break;
-                    case "02":
-                        //Console.WriteLine($"Op2: {DE}, {program[CurrentPositionPointer + 1]}({C_FirstParamMode}), {program[CurrentPositionPointer + 2]}({B_SecondParamMode}), {program[CurrentPositionPointer + 3]}({A_ThirdParamMode})");
+                    case 2:
+                        //Console.WriteLine($"Op2: {DE_OpCode}, {program[CurrentPositionPointer + 1]}({C_FirstParamMode}), {program[CurrentPositionPointer + 2]}({B_SecondParamMode}), {program[CurrentPositionPointer + 3]}({A_ThirdParamMode})");
                         Op2();
                         break;
-                    case "03":
-                        //Console.WriteLine($"Op3: {DE}, {program[CurrentPositionPointer + 1]}({C_FirstParamMode})");
+                    case 3:
+                        //Console.WriteLine($"Op3: {DE_OpCode}, {program[CurrentPositionPointer + 1]}({C_FirstParamMode})");
                         Op3();
                         break;
-                    case "04":
-                        //Console.WriteLine($"Op4: {DE}, {program[CurrentPositionPointer + 1]}({C_FirstParamMode})");
+                    case 4:
+                        //Console.WriteLine($"Op4: {DE_OpCode}, {program[CurrentPositionPointer + 1]}({C_FirstParamMode})");
                         Op4();
                         break;
-                    case "05":
-                        //Console.WriteLine($"Op5 jump-if-true: {DE}, {program[CurrentPositionPointer + 1]}({C_FirstParamMode}), {program[CurrentPositionPointer + 2]}({B_SecondParamMode})");
+                    case 5:
+                        //Console.WriteLine($"Op5 jump-if-true: {DE_OpCode}, {program[CurrentPositionPointer + 1]}({C_FirstParamMode}), {program[CurrentPositionPointer + 2]}({B_SecondParamMode})");
                         Op5();
                         break;
-                    case "06":
-                        //Console.WriteLine($"Op6 jump-if-false: {DE}, {program[CurrentPositionPointer + 1]}({C_FirstParamMode}), {program[CurrentPositionPointer + 2]}({B_SecondParamMode})");
+                    case 6:
+                        //Console.WriteLine($"Op6 jump-if-false: {DE_OpCode}, {program[CurrentPositionPointer + 1]}({C_FirstParamMode}), {program[CurrentPositionPointer + 2]}({B_SecondParamMode})");
                         Op6();
                         break;
-                    case "07":
-                        //Console.WriteLine($"Op7 less than: {DE}, {program[CurrentPositionPointer + 1]}({C_FirstParamMode}), {program[CurrentPositionPointer + 2]}({B_SecondParamMode}), {program[CurrentPositionPointer + 3]}({A_ThirdParamMode})");
+                    case 7:
+                        //Console.WriteLine($"Op7 less than: {DE_OpCode}, {program[CurrentPositionPointer + 1]}({C_FirstParamMode}), {program[CurrentPositionPointer + 2]}({B_SecondParamMode}), {program[CurrentPositionPointer + 3]}({A_ThirdParamMode})");
                         Op7();
                         break;
-                    case "08":
-                        //Console.WriteLine($"Op8 equals: {DE}, {program[CurrentPositionPointer + 1]}({C_FirstParamMode}), {program[CurrentPositionPointer + 2]}({B_SecondParamMode}), {program[CurrentPositionPointer + 3]}({A_ThirdParamMode})");
+                    case 8:
+                        //Console.WriteLine($"Op8 equals: {DE_OpCode}, {program[CurrentPositionPointer + 1]}({C_FirstParamMode}), {program[CurrentPositionPointer + 2]}({B_SecondParamMode}), {program[CurrentPositionPointer + 3]}({A_ThirdParamMode})");
                         Op8();
                         break;
-                    case "99":
-                        Console.WriteLine("Program Halted Expectedly");
+                    case 99:
+                        //Console.WriteLine("Program Halted Expectedly");
                         isrunning = false;
                         break;
                     default:
@@ -93,36 +101,33 @@ namespace AdventOfCode2019
             return program;
         }
 
-        public int CurrentPositionPointer = 0;
-
-        public int input = 1;
-
-        private string DE = "";
-        private string C_FirstParamMode = "";
-        private string B_SecondParamMode = "";
-        private string A_ThirdParamMode = "";
+        int CurrentPositionPointer = 0;
+        int DE_OpCode;
+        int A_ThirdParamMode;
+        int B_SecondParamMode;
+        int C_FirstParamMode;
 
         private void parseOpCode(int opCode)
         {
-            var fullCode = opCode.ToString("00000");
-            DE = fullCode[3].ToString() + fullCode[4].ToString();
-            C_FirstParamMode = fullCode[2].ToString();
-            B_SecondParamMode = fullCode[1].ToString();
-            A_ThirdParamMode = fullCode[0].ToString();
+            A_ThirdParamMode = (opCode / 10000 % 1000 % 100 % 10);//A mode
+            B_SecondParamMode = (opCode / 1000 % 100 % 10);//B mode
+            C_FirstParamMode = (opCode / 100 % 10);//C mode
+            DE_OpCode = (opCode % 100);//Opcode
         }
 
         //add
+        //three parameters
         public void Op1()
         {
             var p1 = program[CurrentPositionPointer + 1];
             var p2 = program[CurrentPositionPointer + 2];
             var p3 = program[CurrentPositionPointer + 3];
 
-            if (C_FirstParamMode == "0")
+            if (C_FirstParamMode == 0)
             {
                 p1 = program[p1];
             }
-            if (B_SecondParamMode == "0")
+            if (B_SecondParamMode == 0)
             {
                 p2 = program[p2];
             }
@@ -132,17 +137,18 @@ namespace AdventOfCode2019
         }
 
         //multiply
+        //three parameters
         public void Op2()
         {
             var p1 = program[CurrentPositionPointer + 1];
             var p2 = program[CurrentPositionPointer + 2];
             var p3 = program[CurrentPositionPointer + 3];
 
-            if (C_FirstParamMode == "0")
+            if (C_FirstParamMode == 0)
             {
                 p1 = program[p1];
             }
-            if (B_SecondParamMode == "0")
+            if (B_SecondParamMode == 0)
             {
                 p2 = program[p2];
             }
@@ -152,24 +158,26 @@ namespace AdventOfCode2019
         }
 
         //read input
+        //one parameter
         public void Op3()
         {
-            Console.WriteLine("Input Read!");
             var p1 = program[CurrentPositionPointer + 1];
             program[p1] = input;
             CurrentPositionPointer += 2;
         }
 
         //output
+        //one parameter
         public void Op4()
         {
             var p1 = program[CurrentPositionPointer + 1];
 
-            if (C_FirstParamMode == "0")
+            if (C_FirstParamMode == 0)
             {
                 p1 = program[p1];
             }
 
+            outputs.Add(p1);
             Console.WriteLine(p1);
             CurrentPositionPointer += 2;
         }
@@ -181,11 +189,11 @@ namespace AdventOfCode2019
             var p1 = program[CurrentPositionPointer + 1];
             var p2 = program[CurrentPositionPointer + 2];
 
-            if (C_FirstParamMode == "0")
+            if (C_FirstParamMode == 0)
             {
                 p1 = program[p1];
             }
-            if (B_SecondParamMode == "0")
+            if (B_SecondParamMode == 0)
             {
                 p2 = program[p2];
             }
@@ -208,11 +216,11 @@ namespace AdventOfCode2019
             var p1 = program[CurrentPositionPointer + 1];
             var p2 = program[CurrentPositionPointer + 2];
 
-            if (C_FirstParamMode == "0")
+            if (C_FirstParamMode == 0)
             {
                 p1 = program[p1];
             }
-            if (B_SecondParamMode == "0")
+            if (B_SecondParamMode == 0)
             {
                 p2 = program[p2];
             }
@@ -235,11 +243,11 @@ namespace AdventOfCode2019
             var p2 = program[CurrentPositionPointer + 2];
             var p3 = program[CurrentPositionPointer + 3];
 
-            if (C_FirstParamMode == "0")
+            if (C_FirstParamMode == 0)
             {
                 p1 = program[p1];
             }
-            if (B_SecondParamMode == "0")
+            if (B_SecondParamMode == 0)
             {
                 p2 = program[p2];
             }
@@ -256,11 +264,11 @@ namespace AdventOfCode2019
             var p2 = program[CurrentPositionPointer + 2];
             var p3 = program[CurrentPositionPointer + 3];
 
-            if (C_FirstParamMode == "0")
+            if (C_FirstParamMode == 0)
             {
                 p1 = program[p1];
             }
-            if (B_SecondParamMode == "0")
+            if (B_SecondParamMode == 0)
             {
                 p2 = program[p2];
             }
