@@ -1,33 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using AdventOfCode2019;
 
 namespace AdventOfCode2019
 {
-    public static class Day05
-    {
-        public static void RunDay()
-        {
-            Console.WriteLine("Day 5");
-
-            var code = Utilities.GetStringFromFile("Day5.txt").SplitIntArrayFromString(',');
-            var vm = new IntCodeVMDay5();
-            vm.RunProgram(code, 1);
-            Console.WriteLine(vm.outputs.Last());
-
-
-            code = Utilities.GetStringFromFile("Day5.txt").SplitIntArrayFromString(',');
-            vm.RunProgram(code, 5);
-            Console.WriteLine(vm.outputs.Last());
-
-            Console.WriteLine("**************");
-            Console.WriteLine(Environment.NewLine);
-        }
-    }
-
-    public class IntCodeVMDay5
+    public class IntCodeVM
     {
         public List<int> outputs = new List<int>();
 
@@ -108,10 +85,10 @@ namespace AdventOfCode2019
 
         private void parseOpCode(int opCode)
         {
-            A_ThirdParamMode =  (opCode / 10000 % 1000 % 100 % 10); //A mode
+            A_ThirdParamMode = (opCode / 10000 % 1000 % 100 % 10); //A mode
             B_SecondParamMode = (opCode / 1000 % 100 % 10);         //B mode
-            C_FirstParamMode =  (opCode / 100 % 10);                //C mode
-            DE_OpCode =         (opCode % 100);                     //Opcode
+            C_FirstParamMode = (opCode / 100 % 10);                //C mode
+            DE_OpCode = (opCode % 100);                     //Opcode
         }
 
         //add

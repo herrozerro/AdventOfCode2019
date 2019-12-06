@@ -14,7 +14,7 @@ namespace AdventOfCode2019Tests
         [Test]
         public void Part1()
         {
-            var vm = new IntCodeVM();
+            var vm = new IntCodeVMDay5();
             var code = new int[] { 1002, 4, 3, 4, 33 };
             vm.RunProgram(code, 0);
             Assert.AreEqual(vm.programCode[4], 99);
@@ -27,7 +27,7 @@ namespace AdventOfCode2019Tests
         [Test]
         public void Part2()
         {
-            var vm = new IntCodeVM();
+            var vm = new IntCodeVMDay5();
             var code = new int[] { 3, 9, 8, 9, 10, 9, 4, 9, 99, -1, 8 };
             vm.RunProgram(code, 8); //equal to eight?
             Assert.AreEqual(vm.outputs.Last(), 1);
