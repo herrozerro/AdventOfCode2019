@@ -27,3 +27,15 @@ This one just clicked.  Initially I was going to make a huge grid and try to sim
 Luckily I didn't need to do any complex math on my points and just needed to intersect the two lists for matches, sum up the x/y to get the closest point.
 
 Part 2 was simple as well.  All I had to do was get my matches again and get the index of each one in both lists and sum together their indexes to get the step count.
+
+### Day 4
+
+This one was just a miserable time.  Bugs, and a few logical errors plagued me.  It took entirely too long to figure out part 2's logic.  But it was still a fun exercise.
+
+### Day 5
+
+This on was fun!  I expanded the IntCodeVM by making it an actual VM class and cleaned it up.  I really hope this one gets resued during the course of the game. 
+
+### Day 6
+
+This one was fairly easy, a variation on Day 3.  Logic worked practically the same way by finding the ancestors and most common ancestor.
