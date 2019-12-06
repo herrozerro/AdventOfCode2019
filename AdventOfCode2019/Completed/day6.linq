@@ -21,7 +21,7 @@ void Main()
 		//Console.WriteLine($"Body: {b.ID} has {ancestors} ancestors");
 		orbits += ancestors;
 	}
-	//orbits.Dump();
+	orbits.Dump();
 	
 	//var me = bodies.First(b =>b.ID == "YOU").Dump();
 	//var san = bodies.First(b =>b.ID == "SAN").Dump();
@@ -31,7 +31,7 @@ void Main()
 	var sanAncestors = new List<string>();
 	foreach (var b in bodies.Where(b =>b.ID == "YOU" || b.ID == "SAN"))
 	{
-		var ancestors = b.Ancestors(bo => bo.ParentBody).ToList().Select(bo => bo.ID).ToList().Dump();
+		var ancestors = b.Ancestors(bo => bo.ParentBody).ToList().Select(bo => bo.ID).ToList();
 		if (b.ID == "YOU")
 		{
 			myAncestors = ancestors;
@@ -43,16 +43,12 @@ void Main()
 		//Console.WriteLine($"Body: {b.ID} has {ancestors} ancestors");
 	}
 	
-	var matches = myAncestors.Intersect(sanAncestors).Dump();
+	var firstmatch = myAncestors.Intersect(sanAncestors).First();
 	
-	int myClosestMatch = myAncestors.IndexOf("72D");
-	int sanClosestMatch = sanAncestors.IndexOf("72D");
+	int myClosestMatch = myAncestors.IndexOf(firstmatch);
+	int sanClosestMatch = sanAncestors.IndexOf(firstmatch);
 	
 	(myClosestMatch + sanClosestMatch).Dump();
-	foreach (var m in matches)
-	{
-		
-	}
 	
 }
 
