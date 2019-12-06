@@ -129,10 +129,6 @@ namespace AdventOfCode2019
                                 passedPasswords.Add(item);
                                 break;
                             }
-                            else if (item.Contains(trip))
-                            {
-                                Console.WriteLine(item);
-                            }
                         }
                     }
 

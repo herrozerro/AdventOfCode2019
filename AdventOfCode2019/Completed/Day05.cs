@@ -13,15 +13,14 @@ namespace AdventOfCode2019
             Console.WriteLine("Day 5");
 
             var code = Utilities.GetStringFromFile("Day5.txt").SplitIntArrayFromString(',');
-
-            //code = new int[] { 3, 0, 4, 0, 99 };
-
             var vm = new IntCodeVM();
+            vm.RunProgram(code, 1);
+            Console.WriteLine(vm.outputs.Last());
 
-            //vm.RunProgram(code, 1);
 
             code = Utilities.GetStringFromFile("Day5.txt").SplitIntArrayFromString(',');
             vm.RunProgram(code, 5);
+            Console.WriteLine(vm.outputs.Last());
 
             Console.WriteLine("**************");
             Console.WriteLine(Environment.NewLine);
@@ -178,7 +177,6 @@ namespace AdventOfCode2019
             }
 
             outputs.Add(p1);
-            Console.WriteLine(p1);
             CurrentPositionPointer += 2;
         }
 

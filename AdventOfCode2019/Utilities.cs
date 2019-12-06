@@ -25,5 +25,10 @@ namespace AdventOfCode2019
         {
             return strArray.Split(delimiter).Select<string, int>(int.Parse).ToArray();
         }
+
+        public static string[] SplitStringArrayFromString(this string strArray, char delimiter)
+        {
+            return strArray.Split(delimiter).ToArray();
+        }
     }
 }

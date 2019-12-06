@@ -23,16 +23,22 @@ namespace AdventOfCode2019
             circuit2.runPath(lines[1].Split(',').ToList());
 
             var matches = circuit1.path.Intersect(circuit2.path).ToList();
+            var matchesint = circuit1.path.Intersect(circuit2.path).Where(x => x != "0,0").ToList().Select(x => x.Split(',').Select<string, int>(x => Math.Abs(int.Parse(x)))).ToList();
+            var sums = matchesint.Select(x => x.Sum()).ToList();
+
+            Console.WriteLine(sums.Min());
 
 
             var matchlist = new List<KeyValuePair<string,int>>();
-            foreach (var match in matches)
+            foreach (var match in matches.Where(x => x != "0,0"))
             {
                 var cind1 = circuit1.path.FindIndex(x => x == match);
                 var cind2 = circuit2.path.FindIndex(x => x == match);
                 matchlist.Add(new KeyValuePair<string, int>(match,cind1 + cind2));
             }
             var ms1 = matchlist.OrderBy(x => x.Value).ToList();
+
+            Console.WriteLine(ms1.First().Value);
 
             Console.WriteLine("**************");
             Console.WriteLine(Environment.NewLine);

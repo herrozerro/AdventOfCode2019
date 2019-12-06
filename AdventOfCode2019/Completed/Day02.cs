@@ -34,7 +34,7 @@ namespace AdventOfCode2019
                     {
                         var fun = mysterfunc(i, j, strcode);
                         isfound = 19690720 != fun;
-                        Console.WriteLine($"x{i} y{j} value = {fun}");
+                        //Console.WriteLine($"x{i} y{j} value = {fun}");
                         if (isfound == false)
                         {
                             Console.WriteLine($"FOUND! x{i} y{j}");
@@ -46,7 +46,7 @@ namespace AdventOfCode2019
             return "NOT FOUND";
         }
 
-        public static int mysterfunc(int i, int j, string strcode)
+        public static int mysterfunc(int i, int j, string strcode, int retIndex = 0)
         {
             code = (strcode ?? "").Split(',').Select<string, int>(int.Parse).ToArray();
             CurrentPosition = 0;
@@ -73,7 +73,7 @@ namespace AdventOfCode2019
                 }
             }
 
-            return code[0];
+            return code[retIndex];
         }
         
         public static int[] code;
