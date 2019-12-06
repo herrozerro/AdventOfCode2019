@@ -12,9 +12,9 @@ namespace AdventOfCode2019
             var FuelForComponents = 0;
             var FuelForWholeRocket = 0;
             
-            var lines = Utilities.GetStringFromFile("Day2.txt");
+            var lines = Utilities.GetLinesFromFile("Day1.txt");
             
-            var inputs = lines.Split(',').Select<string, int>(int.Parse).ToList();
+            var inputs = lines.Select<string, int>(int.Parse).ToList();
             
             foreach (var component in inputs)
             {
