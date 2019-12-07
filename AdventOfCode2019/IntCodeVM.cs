@@ -15,13 +15,14 @@ namespace AdventOfCode2019
             get { return program; }
         }
 
-        int input = 1;
+        public int[] inputs;
+        int inputCursor = 0;
 
-        public int[] RunProgram(int[] programCode, int input)
+        public int RunProgram(int[] programCode, int[] input)
         {
-            this.input = input;
+            this.inputs = input;
             program = programCode;
-            CurrentPositionPointer = 0;
+            //CurrentPositionPointer = 0;
             bool isrunning = true;
             while (isrunning)
             {
@@ -46,7 +47,8 @@ namespace AdventOfCode2019
                     case 4:
                         //Console.WriteLine($"Op4: {DE_OpCode}, {program[CurrentPositionPointer + 1]}({C_FirstParamMode})");
                         Op4();
-                        break;
+                        isrunning = false;
+                        return 0;
                     case 5:
                         //Console.WriteLine($"Op5 jump-if-true: {DE_OpCode}, {program[CurrentPositionPointer + 1]}({C_FirstParamMode}), {program[CurrentPositionPointer + 2]}({B_SecondParamMode})");
                         Op5();
@@ -74,7 +76,7 @@ namespace AdventOfCode2019
                 }
             }
 
-            return program;
+            return 1;
         }
 
         int CurrentPositionPointer = 0;
@@ -138,7 +140,12 @@ namespace AdventOfCode2019
         public void Op3()
         {
             var p1 = program[CurrentPositionPointer + 1];
-            program[p1] = input;
+            program[p1] = inputs[inputCursor];
+            inputCursor = 1;
+            if (inputCursor < inputs.Length)
+            {
+                
+            }
             CurrentPositionPointer += 2;
         }
 

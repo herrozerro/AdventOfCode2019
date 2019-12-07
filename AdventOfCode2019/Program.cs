@@ -7,13 +7,13 @@ namespace AdventOfCode2019
     {
         static void Main(string[] args)
         {
-            Day01.RunDay();
-            Day02.RunDay();
-            Day03.RunDay();
-            Day04.RunDay();
-            Day05.RunDay();
+            //Day01.RunDay();
+            //Day02.RunDay();
+            //Day03.RunDay();
+            //Day04.RunDay();
+            //Day05.RunDay();
             //Day06.RunDay();
-            //Day07.RunDay();
+            Day07.RunDay();
             //Day08.RunDay();
             //Day09.RunDay();
             //Day10.RunDay();

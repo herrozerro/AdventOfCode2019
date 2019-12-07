@@ -10,6 +10,8 @@ namespace AdventOfCode2019
         {
             Console.WriteLine("Day 6");
 
+            var code = Utilities.GetStringFromFile("Day6.txt");
+
 
 
             Console.WriteLine("**************");
