@@ -10,8 +10,6 @@ namespace AdventOfCode2019
         public static void RunDay()
         {
             Console.WriteLine("Day 7");
-            //var code = Utilities.GetStringFromFile("Day5.txt").SplitIntArrayFromString(',');
-            //code = new int[] { 3, 15, 3, 16, 1002, 16, 10, 16, 1, 16, 15, 15, 4, 15, 99, 0, 0 };
             part1();
             part2();
 
@@ -85,23 +83,23 @@ namespace AdventOfCode2019
                 while (true)
                 {
                     var isdone = 0;
-                    isdone += amp1.RunProgram(code1, new int[] { phasesettings[0], output });
+                    isdone += amp1.RunProgram(code1, new int[] { phasesettings[0], output }, true);
                     output = amp1.outputs.Last();
                     //outputs.Add(output);
 
-                    isdone += amp2.RunProgram(code2, new int[] { phasesettings[1], output });
+                    isdone += amp2.RunProgram(code2, new int[] { phasesettings[1], output }, true);
                     output = amp2.outputs.Last();
                     //outputs.Add(output);
 
-                    isdone += amp3.RunProgram(code3, new int[] { phasesettings[2], output });
+                    isdone += amp3.RunProgram(code3, new int[] { phasesettings[2], output }, true);
                     output = amp3.outputs.Last();
                     //outputs.Add(output);
 
-                    isdone += amp4.RunProgram(code4, new int[] { phasesettings[3], output });
+                    isdone += amp4.RunProgram(code4, new int[] { phasesettings[3], output }, true);
                     output = amp4.outputs.Last();
                     //outputs.Add(output);
 
-                    isdone += amp5.RunProgram(code5, new int[] { phasesettings[4], output });
+                    isdone += amp5.RunProgram(code5, new int[] { phasesettings[4], output }, true);
                     output = amp5.outputs.Last();
                     outputs.Add(output);
 

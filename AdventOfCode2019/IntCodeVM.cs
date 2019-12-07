@@ -18,7 +18,7 @@ namespace AdventOfCode2019
         public int[] inputs;
         int inputCursor = 0;
 
-        public int RunProgram(int[] programCode, int[] input)
+        public int RunProgram(int[] programCode, int[] input, bool pauseOnOutput = false)
         {
             this.inputs = input;
             program = programCode;
@@ -47,8 +47,12 @@ namespace AdventOfCode2019
                     case 4:
                         //Console.WriteLine($"Op4: {DE_OpCode}, {program[CurrentPositionPointer + 1]}({C_FirstParamMode})");
                         Op4();
-                        isrunning = false;
-                        return 0;
+                        if (pauseOnOutput)
+                        {
+                            isrunning = false;
+                            return 0;
+                        }
+                        break;
                     case 5:
                         //Console.WriteLine($"Op5 jump-if-true: {DE_OpCode}, {program[CurrentPositionPointer + 1]}({C_FirstParamMode}), {program[CurrentPositionPointer + 2]}({B_SecondParamMode})");
                         Op5();
