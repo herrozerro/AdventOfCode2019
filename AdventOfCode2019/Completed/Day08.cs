@@ -30,17 +30,19 @@ namespace AdventOfCode2019
 
             char[] finaloutput = new char[150];
 
-            foreach (var item in layers)
+            foreach (var layer in layers)
             {
                 for (int i = 0; i < 150; i++)
                 {
-                    if (finaloutput[i] != '0' && finaloutput[i] != '1')
+                    if (finaloutput[i] != ' ' && finaloutput[i] != '█')
                     {
-                        switch (item.Value[i])
+                        switch (layer.Value[i])
                         {
                             case '0':
+                                finaloutput[i] = ' ';
+                                break;
                             case '1':
-                                finaloutput[i] = item.Value[i];
+                                finaloutput[i] = '█';
                                 break;
                             case '2':
                             default:
@@ -50,18 +52,9 @@ namespace AdventOfCode2019
                 }
             }
 
-            for (int i = 0; i < 150; i++)
-            {
-                if (finaloutput[i] == '0')
-                {
-                    finaloutput[i] = ' ';
-                }
-            }
-
             for (int i = 0; i < 6; i++)
             {
-                
-                Console.WriteLine(string.Join(',', finaloutput.ToList().Skip(i * 25).Take(25).ToList()).Replace(",",""));
+                Console.WriteLine(string.Join("", finaloutput.ToList().Skip(i * 25).Take(25).ToList()));
             }
 
             Console.WriteLine("**************");
