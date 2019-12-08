@@ -34,11 +34,7 @@ namespace AdventOfCode2019
             {
                 for (int i = 0; i < 150; i++)
                 {
-                    if (finaloutput[i] == '0' || finaloutput[i] == '1')
-                    {
-                        //pixel already found
-                    }
-                    else
+                    if (finaloutput[i] != '0' && finaloutput[i] != '1')
                     {
                         switch (item.Value[i])
                         {
@@ -65,7 +61,7 @@ namespace AdventOfCode2019
             for (int i = 0; i < 6; i++)
             {
                 
-                Console.WriteLine(string.Join(',', finaloutput.ToList().Skip(i * 25).Take(25).ToList()));
+                Console.WriteLine(string.Join(',', finaloutput.ToList().Skip(i * 25).Take(25).ToList()).Replace(",",""));
             }
 
             Console.WriteLine("**************");
