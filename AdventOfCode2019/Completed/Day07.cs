@@ -67,6 +67,7 @@ namespace AdventOfCode2019
                 phasesettings = r.ToList()
                         .Select(x => int.Parse(x.ToString()))
                         .ToArray();
+                //phasesettings = new int[] { 9, 8, 7, 6, 5 };
                 var amp1 = new IntCodeVM();
                 var amp2 = new IntCodeVM();
                 var amp3 = new IntCodeVM();
@@ -79,29 +80,47 @@ namespace AdventOfCode2019
                 var code4 = Utilities.GetStringFromFile("Day7.txt").SplitIntArrayFromString(',');
                 var code5 = Utilities.GetStringFromFile("Day7.txt").SplitIntArrayFromString(',');
 
+                //var code1 = new int[] { 3,26,1001,26,-4,26,3,27,1002,27,2,27,1,27,26,27,4,27,1001,28,-1,28,1005,28,6,99,0,0,5 };
+                //var code2 = new int[] { 3,26,1001,26,-4,26,3,27,1002,27,2,27,1,27,26,27,4,27,1001,28,-1,28,1005,28,6,99,0,0,5 };
+                //var code3 = new int[] { 3,26,1001,26,-4,26,3,27,1002,27,2,27,1,27,26,27,4,27,1001,28,-1,28,1005,28,6,99,0,0,5 };
+                //var code4 = new int[] { 3,26,1001,26,-4,26,3,27,1002,27,2,27,1,27,26,27,4,27,1001,28,-1,28,1005,28,6,99,0,0,5 };
+                //var code5 = new int[] { 3,26,1001,26,-4,26,3,27,1002,27,2,27,1,27,26,27,4,27,1001,28,-1,28,1005,28,6,99,0,0,5 };
+
+                bool initSetup = true;
                 //var code = Utilities.GetStringFromFile("Day7.txt").SplitIntArrayFromString(',');
                 while (true)
                 {
                     var isdone = 0;
-                    isdone += amp1.RunProgram(code1, new int[] { phasesettings[0], output }, true);
+
+                    int[] inp1 = initSetup ? new int[] { phasesettings[0], output } : new int[] { output };
+                    isdone += amp1.RunProgram(code1, inp1, true);
                     output = amp1.outputs.Last();
                     //outputs.Add(output);
 
-                    isdone += amp2.RunProgram(code2, new int[] { phasesettings[1], output }, true);
+                    int[] inp2 = initSetup ? new int[] { phasesettings[1], output } : new int[] { output };
+                    isdone += amp2.RunProgram(code2, inp2, true);
                     output = amp2.outputs.Last();
                     //outputs.Add(output);
 
-                    isdone += amp3.RunProgram(code3, new int[] { phasesettings[2], output }, true);
+                    int[] inp3 = initSetup ? new int[] { phasesettings[2], output } : new int[] { output };
+                    isdone += amp3.RunProgram(code3, inp3, true);
                     output = amp3.outputs.Last();
                     //outputs.Add(output);
 
-                    isdone += amp4.RunProgram(code4, new int[] { phasesettings[3], output }, true);
+                    int[] inp4 = initSetup ? new int[] { phasesettings[3], output } : new int[] { output };
+                    isdone += amp4.RunProgram(code4, inp4, true);
                     output = amp4.outputs.Last();
                     //outputs.Add(output);
 
-                    isdone += amp5.RunProgram(code5, new int[] { phasesettings[4], output }, true);
+                    int[] inp5 = initSetup ? new int[] { phasesettings[4], output } : new int[] { output };
+                    isdone += amp5.RunProgram(code5, inp5, true);
                     output = amp5.outputs.Last();
                     outputs.Add(output);
+
+                    if (initSetup)
+                    {
+                        initSetup = false;
+                    }
 
                     if (isdone != 0)
                     {

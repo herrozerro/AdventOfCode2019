@@ -20,6 +20,7 @@ namespace AdventOfCode2019
 
         public int RunProgram(int[] programCode, int[] input, bool pauseOnOutput = false)
         {
+            inputCursor = 0;
             this.inputs = input;
             program = programCode;
             //CurrentPositionPointer = 0;
@@ -145,11 +146,9 @@ namespace AdventOfCode2019
         {
             var p1 = program[CurrentPositionPointer + 1];
             program[p1] = inputs[inputCursor];
-            inputCursor = 1;
-            if (inputCursor < inputs.Length)
-            {
-                
-            }
+
+            inputCursor++;
+
             CurrentPositionPointer += 2;
         }
 
