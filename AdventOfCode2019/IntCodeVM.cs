@@ -11,7 +11,7 @@ namespace AdventOfCode2019
         private long[] inputs;
 
         #region Public Access
-        public List<long> outputs = new List<long>();
+        public Queue<long> outputs = new Queue<long>();
         public long[] programCode
         {
             get { return program; }
@@ -243,7 +243,7 @@ namespace AdventOfCode2019
 
             p1 = GetParameterValue(p1, C_FirstParamMode);
 
-            outputs.Add(p1);
+            outputs.Enqueue(p1);
 
             if (config.FriendlyLogging || config.Logging)
             {

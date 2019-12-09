@@ -25,7 +25,7 @@ namespace AdventOfCode2019Tests
 
             lines = new long[]{ 104, 1125899906842624, 99 };
             vm.RunProgram(lines, new long[] { 0 }, false, true);
-            Assert.AreEqual(vm.outputs[0].ToString(), "1125899906842624");
+            Assert.AreEqual(vm.outputs.Peek().ToString(), "1125899906842624");
         }
 
         [Test]

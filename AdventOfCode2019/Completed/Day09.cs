@@ -10,14 +10,14 @@ namespace AdventOfCode2019
         {
             Console.WriteLine("Day 9");
 
-            p1();
-            p2();
+            P1();
+            P2();
 
             Console.WriteLine("**************");
             Console.WriteLine(Environment.NewLine);
         }
 
-        public static void p1()
+        public static void P1()
         {
             var lines = Utilities.GetStringFromFile("Day9.txt").SplitLongArrayFromString(',');
 
@@ -27,10 +27,10 @@ namespace AdventOfCode2019
 
             vm.RunProgram(lines, new long[] { 1 });
 
-            Console.WriteLine(vm.outputs[0]);
+            Console.WriteLine(vm.outputs.Peek());
         }
 
-        public static void p2()
+        public static void P2()
         {
             var lines = Utilities.GetStringFromFile("Day9.txt").SplitLongArrayFromString(',');
             var config = new IntCodeVMConfiguration();
@@ -40,7 +40,7 @@ namespace AdventOfCode2019
 
             vm.RunProgram(lines, new long[] { 2 });
 
-            Console.WriteLine(vm.outputs[0]);
+            Console.WriteLine(vm.outputs.Peek());
         }
     }
 }
