@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace AdventOfCode2019
@@ -22,10 +23,15 @@ namespace AdventOfCode2019
 
         int inputCursor = 0;
 
+        IntCodeVMConfiguration config;
+
+        bool pauseOnOutput = false;
+
         public int RunProgram(long[] programCode, long[] input, bool pauseOnOutput = false, bool resetVM = false)
         {
             inputCursor = 0;
             this.inputs = input;
+            this.pauseOnOutput = pauseOnOutput;
 
             if (resetVM)
             {
@@ -45,22 +51,34 @@ namespace AdventOfCode2019
 
                 parseOpCode(x);
 
+                if (config.Logging)
+                {
+                    Delegate d;
+                    if (opLogging.Any(x => x.Key == DE_OpCode))
+                    {
+                        d = opLogging.FirstOrDefault(d => d.Key == DE_OpCode)
+                            .Value;
+                    }
+                    else
+                    {
+                        d = opLogging.FirstOrDefault(d => d.Key == -1)
+                            .Value;
+                    }
+                    d.DynamicInvoke(DE_OpCode, program[CurPosCursor + 1], program[CurPosCursor + 2], program[CurPosCursor + 3], C_FirstParamMode, B_SecondParamMode, A_ThirdParamMode, config.VerboseLogging);
+                }
+
                 switch (DE_OpCode)
                 {
                     case 1:
-                        Console.WriteLine($"Op1 add: {DE_OpCode}, {program[CurPosCursor + 1]}({C_FirstParamMode}), {program[CurPosCursor + 2]}({B_SecondParamMode}), {program[CurPosCursor + 3]}({A_ThirdParamMode})");
                         Op1();
                         break;
                     case 2:
-                        Console.WriteLine($"Op2 multiply: {DE_OpCode}, {program[CurPosCursor + 1]}({C_FirstParamMode}), {program[CurPosCursor + 2]}({B_SecondParamMode}), {program[CurPosCursor + 3]}({A_ThirdParamMode})");
                         Op2();
                         break;
                     case 3:
-                        Console.WriteLine($"Op3 input: {DE_OpCode}, {program[CurPosCursor + 1]}({C_FirstParamMode})");
                         Op3();
                         break;
                     case 4:
-                        Console.WriteLine($"Op4 output: {DE_OpCode}, {program[CurPosCursor + 1]}({C_FirstParamMode})");
                         Op4();
                         if (pauseOnOutput)
                         {
@@ -69,23 +87,18 @@ namespace AdventOfCode2019
                         }
                         break;
                     case 5:
-                        Console.WriteLine($"Op5 jump-if-true: {DE_OpCode}, {program[CurPosCursor + 1]}({C_FirstParamMode}), {program[CurPosCursor + 2]}({B_SecondParamMode})");
                         Op5();
                         break;
                     case 6:
-                        Console.WriteLine($"Op6 jump-if-false: {DE_OpCode}, {program[CurPosCursor + 1]}({C_FirstParamMode}), {program[CurPosCursor + 2]}({B_SecondParamMode})");
                         Op6();
                         break;
                     case 7:
-                        Console.WriteLine($"Op7 less than: {DE_OpCode}, {program[CurPosCursor + 1]}({C_FirstParamMode}), {program[CurPosCursor + 2]}({B_SecondParamMode}), {program[CurPosCursor + 3]}({A_ThirdParamMode})");
                         Op7();
                         break;
                     case 8:
-                        Console.WriteLine($"Op8 equals: {DE_OpCode}, {program[CurPosCursor + 1]}({C_FirstParamMode}), {program[CurPosCursor + 2]}({B_SecondParamMode}), {program[CurPosCursor + 3]}({A_ThirdParamMode})");
                         Op8();
                         break;
                     case 9:
-                        Console.WriteLine($"Op9 Set Offset: {DE_OpCode}, {program[CurPosCursor + 1]}({C_FirstParamMode})");
                         op9();
                         break;
                     case 99:
@@ -104,7 +117,7 @@ namespace AdventOfCode2019
 
         long CurPosCursor = 0;
         long DE_OpCode;
-        
+
         // Parameter Modes
         // 0 = positional mode
         // 1 = immediate mode
@@ -115,8 +128,6 @@ namespace AdventOfCode2019
 
         long reletiveModeOffset = 0;
 
-        long[] extMemeory = new long[10000];
-
         private void parseOpCode(long opCode)
         {
             A_ThirdParamMode = (ParameterMode)(opCode / 10000 % 1000 % 100 % 10); //A mode
@@ -124,6 +135,21 @@ namespace AdventOfCode2019
             C_FirstParamMode = (ParameterMode)(opCode / 100 % 10);                //C mode
             DE_OpCode = (opCode % 100);                     //Opcode
         }
+
+        private readonly List<KeyValuePair<int, Delegate>> opLogging = new List<KeyValuePair<int, Delegate>>() {
+            new KeyValuePair<int, Delegate>(1, new Action<long, long, long, long,ParameterMode, ParameterMode, ParameterMode, bool>((DE, p1, p2, p3, p1m, p2m, p3m, isVerbose) => { var s = $"Op1 add: {DE}, {p1}({p1m}), {p2}({p2m}), {p3}({p3m})"; if (!isVerbose) Console.Write(s); else Console.WriteLine(s); }))
+            ,new KeyValuePair<int, Delegate>(2, new Action<long, long, long, long,ParameterMode, ParameterMode, ParameterMode, bool>((DE, p1, p2, p3, p1m, p2m, p3m, isVerbose) => {var s = $"Op2 Multiply: {DE}, {p1}({p1m}), {p2}({p2m}), {p3}({p3m})"; if (!isVerbose) Console.Write(s); else Console.WriteLine(s); }))
+            ,new KeyValuePair<int, Delegate>(3, new Action<long, long, long, long,ParameterMode, ParameterMode, ParameterMode, bool>((DE, p1, p2, p3, p1m, p2m, p3m, isVerbose) => {var s = $"Op3 input: {DE}, {p1}({p1m})"; if (!isVerbose) Console.Write(s); else Console.WriteLine(s); }))
+            ,new KeyValuePair<int, Delegate>(4, new Action<long, long, long, long,ParameterMode, ParameterMode, ParameterMode, bool>((DE, p1, p2, p3, p1m, p2m, p3m, isVerbose) => {var s = $"Op4 output: {DE}, {p1}({p1m})"; if (!isVerbose) Console.Write(s); else Console.WriteLine(s); }))
+            ,new KeyValuePair<int, Delegate>(5, new Action<long, long, long, long,ParameterMode, ParameterMode, ParameterMode, bool>((DE, p1, p2, p3, p1m, p2m, p3m, isVerbose) => {var s = $"Op5 jump if true: {DE}, {p1}({p1m}), {p2}({p2m})"; if (!isVerbose) Console.Write(s); else Console.WriteLine(s); }))
+            ,new KeyValuePair<int, Delegate>(6, new Action<long, long, long, long,ParameterMode, ParameterMode, ParameterMode, bool>((DE, p1, p2, p3, p1m, p2m, p3m, isVerbose) => {var s = $"Op6 jump if false: {DE}, {p1}({p1m}), {p2}({p2m})"; if (!isVerbose) Console.Write(s); else Console.WriteLine(s); }))
+            ,new KeyValuePair<int, Delegate>(7, new Action<long, long, long, long,ParameterMode, ParameterMode, ParameterMode, bool>((DE, p1, p2, p3, p1m, p2m, p3m, isVerbose) => {var s = $"Op7 less than: {DE}, {p1}({p1m}), {p2}({p2m}), {p3}({p3m})"; if (!isVerbose) Console.Write(s); else Console.WriteLine(s); }))
+            ,new KeyValuePair<int, Delegate>(8, new Action<long, long, long, long,ParameterMode, ParameterMode, ParameterMode, bool>((DE, p1, p2, p3, p1m, p2m, p3m, isVerbose) => {var s = $"Op8 is equal: {DE}, {p1}({p1m}), {p2}({p2m}), {p3}({p3m})"; if (!isVerbose) Console.Write(s); else Console.WriteLine(s); }))
+            ,new KeyValuePair<int, Delegate>(9, new Action<long, long, long, long,ParameterMode, ParameterMode, ParameterMode, bool>((DE, p1, p2, p3, p1m, p2m, p3m, isVerbose) => {var s = $"Op9 set offset: {DE}, {p1}({p1m})"; if (!isVerbose) Console.Write(s); else Console.WriteLine(s); }))
+            ,new KeyValuePair<int, Delegate>(99, new Action<long, long, long, long,ParameterMode, ParameterMode, ParameterMode, bool>((DE, p1, p2, p3, p1m, p2m, p3m, isVerbose) => {var s = $"Execution Halted Successfully"; if (!isVerbose) Console.Write(s); else Console.WriteLine(s); }))
+            ,new KeyValuePair<int, Delegate>(-1, new Action<long, long, long, long,ParameterMode, ParameterMode, ParameterMode, bool>((DE, p1, p2, p3, p1m, p2m, p3m, isVerbose) => {var s = $"Execution Halted Unexpectedly"; if (!isVerbose) Console.Write(s); else Console.WriteLine(s); }))
+        };
+
 
         //add
         //three parameters
@@ -135,10 +161,16 @@ namespace AdventOfCode2019
 
             p1 = GetParameterValue(p1, C_FirstParamMode);
             p2 = GetParameterValue(p2, B_SecondParamMode);
-            
+
             p3 = GetParameterPosition(p3, A_ThirdParamMode);
 
             program[p3] = p1 + p2;
+
+            if (config.FriendlyLogging || config.Logging)
+            {
+                Console.WriteLine($" - {p1} + {p2}({p1 + p2}) stored into program[{p3}]");
+            }
+
             CurPosCursor += 4;
         }
 
@@ -152,10 +184,16 @@ namespace AdventOfCode2019
 
             p1 = GetParameterValue(p1, C_FirstParamMode);
             p2 = GetParameterValue(p2, B_SecondParamMode);
-            
+
             p3 = GetParameterPosition(p3, A_ThirdParamMode);
 
             program[p3] = p1 * p2;
+
+            if (config.FriendlyLogging || config.Logging)
+            {
+                Console.WriteLine($" - {p1} * {p2}({p1 * p2}) stored into program[{p3}]");
+            }
+
             CurPosCursor += 4;
         }
 
@@ -169,8 +207,12 @@ namespace AdventOfCode2019
 
             program[p1] = inputs[inputCursor];
 
-            inputCursor++;
+            if (config.FriendlyLogging || config.Logging)
+            {
+                Console.WriteLine($" - Input {inputs[inputCursor]} stored into program[{p1}]");
+            }
 
+            inputCursor++;
             CurPosCursor += 2;
         }
 
@@ -183,6 +225,12 @@ namespace AdventOfCode2019
             p1 = GetParameterValue(p1, C_FirstParamMode);
 
             outputs.Add(p1);
+
+            if (config.FriendlyLogging || config.Logging)
+            {
+                Console.WriteLine($" - Output {p1} Paused on output {pauseOnOutput}");
+            }
+
             CurPosCursor += 2;
         }
 
@@ -205,6 +253,11 @@ namespace AdventOfCode2019
                 CurPosCursor += 3;
             }
 
+            if (config.FriendlyLogging || config.Logging)
+            {
+                Console.WriteLine($" - Jump to Program[{p2}] if program[{CurPosCursor + 1}]({p1} - {C_FirstParamMode}) is true, ");
+            }
+
         }
 
         //jump if false
@@ -225,6 +278,11 @@ namespace AdventOfCode2019
             {
                 CurPosCursor += 3;
             }
+
+            if (config.FriendlyLogging || config.Logging)
+            {
+                Console.WriteLine($" - Jump to Program[{p2}] if program[{CurPosCursor + 1}]({p1} - {C_FirstParamMode}) is False, ");
+            }
         }
 
         //is less than
@@ -234,13 +292,18 @@ namespace AdventOfCode2019
             var p1 = program[CurPosCursor + 1];
             var p2 = program[CurPosCursor + 2];
             var p3 = program[CurPosCursor + 3];
-            
+
             p1 = GetParameterValue(p1, C_FirstParamMode);
             p2 = GetParameterValue(p2, B_SecondParamMode);
             p3 = GetParameterPosition(p3, A_ThirdParamMode);
 
             program[p3] = (p1 < p2 ? 1 : 0);
             CurPosCursor += 4;
+
+            if (config.FriendlyLogging || config.Logging)
+            {
+                Console.WriteLine($" - {p1} < {p2}({(p1 < p2 ? 1 : 0)}) stored into program[{p3}]");
+            }
         }
 
         //equals
@@ -257,6 +320,11 @@ namespace AdventOfCode2019
 
             program[p3] = (p1 == p2 ? 1 : 0);
             CurPosCursor += 4;
+
+            if (config.FriendlyLogging || config.Logging)
+            {
+                Console.WriteLine($" - {p1} < {p2}({(p1 == p2 ? 1 : 0)}) stored into program[{p3}]");
+            }
         }
 
         //Adjust Releative Base
@@ -270,6 +338,11 @@ namespace AdventOfCode2019
             reletiveModeOffset += p1;
 
             CurPosCursor += 2;
+
+            if (config.FriendlyLogging || config.Logging)
+            {
+                Console.WriteLine($" - Reletive Mode Offset {reletiveModeOffset - p1} to { reletiveModeOffset }");
+            }
         }
 
         public long GetParameterValue(long param, ParameterMode mode)
@@ -284,7 +357,7 @@ namespace AdventOfCode2019
                     break;
                 case ParameterMode.Immediate:
                 default:
-                    break; 
+                    break;
             }
 
             return param;
@@ -299,6 +372,16 @@ namespace AdventOfCode2019
 
             return param;
         }
+
+        public IntCodeVM()
+        {
+            config = new IntCodeVMConfiguration();
+        }
+
+        public IntCodeVM(IntCodeVMConfiguration config)
+        {
+            this.config = config;
+        }
     }
 
     public enum ParameterMode
@@ -306,5 +389,12 @@ namespace AdventOfCode2019
         Positional = 0,
         Immediate = 1,
         Relative = 2
+    }
+
+    public class IntCodeVMConfiguration
+    {
+        public bool Logging = false;
+        public bool VerboseLogging = false;
+        public bool FriendlyLogging = false;
     }
 }

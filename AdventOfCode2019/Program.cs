@@ -32,7 +32,7 @@ namespace AdventOfCode2019
             //Day23.RunDay();
             //Day24.RunDay();
             //Day25.RunDay();
-            
+
         }
 
         

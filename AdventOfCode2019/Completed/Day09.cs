@@ -21,7 +21,9 @@ namespace AdventOfCode2019
         {
             var lines = Utilities.GetStringFromFile("Day9.txt").SplitLongArrayFromString(',');
 
-            var vm = new IntCodeVM();
+            var config = new IntCodeVMConfiguration();
+            //config = new IntCodeVMConfiguration { Logging = true, FriendlyLogging = false };
+            var vm = new IntCodeVM(config);
 
             vm.RunProgram(lines, new long[] { 1 });
 
@@ -31,8 +33,10 @@ namespace AdventOfCode2019
         public static void p2()
         {
             var lines = Utilities.GetStringFromFile("Day9.txt").SplitLongArrayFromString(',');
+            var config = new IntCodeVMConfiguration();
+            //config = new IntCodeVMConfiguration { Logging = true, FriendlyLogging = false };
 
-            var vm = new IntCodeVM();
+            var vm = new IntCodeVM(config);
 
             vm.RunProgram(lines, new long[] { 2 });
 
