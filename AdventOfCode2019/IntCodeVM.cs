@@ -323,7 +323,7 @@ namespace AdventOfCode2019
 
             if (config.FriendlyLogging || config.Logging)
             {
-                Console.WriteLine($" - {p1} < {p2}({(p1 == p2 ? 1 : 0)}) stored into program[{p3}]");
+                Console.WriteLine($" - {p1} == {p2}({(p1 == p2 ? 1 : 0)}) stored into program[{p3}]");
             }
         }
 
