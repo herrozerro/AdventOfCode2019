@@ -7,25 +7,22 @@ namespace AdventOfCode2019
 {
     public class IntCodeVM
     {
-        public List<long> outputs = new List<long>();
-
         private long[] program = new long[0];
+        private long[] inputs;
+
+        #region Public Access
+        public List<long> outputs = new List<long>();
         public long[] programCode
         {
             get { return program; }
         }
-
-        private long[] inputs;
         public long[] programInputs
         {
             get { return inputs; }
         }
-
-        int inputCursor = 0;
+        #endregion
 
         IntCodeVMConfiguration config;
-
-        bool pauseOnOutput = false;
 
         public int RunProgram(long[] programCode, long[] input, bool pauseOnOutput = false, bool resetVM = false)
         {
@@ -99,7 +96,7 @@ namespace AdventOfCode2019
                         Op8();
                         break;
                     case 9:
-                        op9();
+                        Op9();
                         break;
                     case 99:
                         //Console.WriteLine("Program Halted Expectedly");
@@ -115,7 +112,8 @@ namespace AdventOfCode2019
             return 1;
         }
 
-        long CurPosCursor = 0;
+        #region State Items
+        //OpCode
         long DE_OpCode;
 
         // Parameter Modes
@@ -126,8 +124,14 @@ namespace AdventOfCode2019
         ParameterMode B_SecondParamMode;
         ParameterMode C_FirstParamMode;
 
+        int inputCursor = 0;
+        long CurPosCursor = 0;
         long reletiveModeOffset = 0;
+        
+        bool pauseOnOutput = false;
+        #endregion
 
+        #region State Methods
         private void parseOpCode(long opCode)
         {
             A_ThirdParamMode = (ParameterMode)(opCode / 10000 % 1000 % 100 % 10); //A mode
@@ -136,21 +140,36 @@ namespace AdventOfCode2019
             DE_OpCode = (opCode % 100);                     //Opcode
         }
 
-        private readonly List<KeyValuePair<int, Delegate>> opLogging = new List<KeyValuePair<int, Delegate>>() {
-            new KeyValuePair<int, Delegate>(1, new Action<long, long, long, long,ParameterMode, ParameterMode, ParameterMode, bool>((DE, p1, p2, p3, p1m, p2m, p3m, isVerbose) => { var s = $"Op1 add: {DE}, {p1}({p1m}), {p2}({p2m}), {p3}({p3m})"; if (!isVerbose) Console.Write(s); else Console.WriteLine(s); }))
-            ,new KeyValuePair<int, Delegate>(2, new Action<long, long, long, long,ParameterMode, ParameterMode, ParameterMode, bool>((DE, p1, p2, p3, p1m, p2m, p3m, isVerbose) => {var s = $"Op2 Multiply: {DE}, {p1}({p1m}), {p2}({p2m}), {p3}({p3m})"; if (!isVerbose) Console.Write(s); else Console.WriteLine(s); }))
-            ,new KeyValuePair<int, Delegate>(3, new Action<long, long, long, long,ParameterMode, ParameterMode, ParameterMode, bool>((DE, p1, p2, p3, p1m, p2m, p3m, isVerbose) => {var s = $"Op3 input: {DE}, {p1}({p1m})"; if (!isVerbose) Console.Write(s); else Console.WriteLine(s); }))
-            ,new KeyValuePair<int, Delegate>(4, new Action<long, long, long, long,ParameterMode, ParameterMode, ParameterMode, bool>((DE, p1, p2, p3, p1m, p2m, p3m, isVerbose) => {var s = $"Op4 output: {DE}, {p1}({p1m})"; if (!isVerbose) Console.Write(s); else Console.WriteLine(s); }))
-            ,new KeyValuePair<int, Delegate>(5, new Action<long, long, long, long,ParameterMode, ParameterMode, ParameterMode, bool>((DE, p1, p2, p3, p1m, p2m, p3m, isVerbose) => {var s = $"Op5 jump if true: {DE}, {p1}({p1m}), {p2}({p2m})"; if (!isVerbose) Console.Write(s); else Console.WriteLine(s); }))
-            ,new KeyValuePair<int, Delegate>(6, new Action<long, long, long, long,ParameterMode, ParameterMode, ParameterMode, bool>((DE, p1, p2, p3, p1m, p2m, p3m, isVerbose) => {var s = $"Op6 jump if false: {DE}, {p1}({p1m}), {p2}({p2m})"; if (!isVerbose) Console.Write(s); else Console.WriteLine(s); }))
-            ,new KeyValuePair<int, Delegate>(7, new Action<long, long, long, long,ParameterMode, ParameterMode, ParameterMode, bool>((DE, p1, p2, p3, p1m, p2m, p3m, isVerbose) => {var s = $"Op7 less than: {DE}, {p1}({p1m}), {p2}({p2m}), {p3}({p3m})"; if (!isVerbose) Console.Write(s); else Console.WriteLine(s); }))
-            ,new KeyValuePair<int, Delegate>(8, new Action<long, long, long, long,ParameterMode, ParameterMode, ParameterMode, bool>((DE, p1, p2, p3, p1m, p2m, p3m, isVerbose) => {var s = $"Op8 is equal: {DE}, {p1}({p1m}), {p2}({p2m}), {p3}({p3m})"; if (!isVerbose) Console.Write(s); else Console.WriteLine(s); }))
-            ,new KeyValuePair<int, Delegate>(9, new Action<long, long, long, long,ParameterMode, ParameterMode, ParameterMode, bool>((DE, p1, p2, p3, p1m, p2m, p3m, isVerbose) => {var s = $"Op9 set offset: {DE}, {p1}({p1m})"; if (!isVerbose) Console.Write(s); else Console.WriteLine(s); }))
-            ,new KeyValuePair<int, Delegate>(99, new Action<long, long, long, long,ParameterMode, ParameterMode, ParameterMode, bool>((DE, p1, p2, p3, p1m, p2m, p3m, isVerbose) => {var s = $"Execution Halted Successfully"; if (!isVerbose) Console.Write(s); else Console.WriteLine(s); }))
-            ,new KeyValuePair<int, Delegate>(-1, new Action<long, long, long, long,ParameterMode, ParameterMode, ParameterMode, bool>((DE, p1, p2, p3, p1m, p2m, p3m, isVerbose) => {var s = $"Execution Halted Unexpectedly"; if (!isVerbose) Console.Write(s); else Console.WriteLine(s); }))
-        };
+        private long GetParameterValue(long param, ParameterMode mode)
+        {
+            switch (mode)
+            {
+                case ParameterMode.Positional:
+                    param = program[param];
+                    break;
+                case ParameterMode.Relative:
+                    param = program[param + reletiveModeOffset];
+                    break;
+                case ParameterMode.Immediate:
+                default:
+                    break;
+            }
 
+            return param;
+        }
 
+        public long GetParameterPosition(long param, ParameterMode mode)
+        {
+            if (mode == ParameterMode.Relative)
+            {
+                param += reletiveModeOffset;
+            }
+
+            return param;
+        }
+        #endregion
+
+        #region OpCodes
         //add
         //three parameters
         public void Op1()
@@ -329,7 +348,7 @@ namespace AdventOfCode2019
 
         //Adjust Releative Base
         //One Parameter
-        public void op9()
+        public void Op9()
         {
             var p1 = program[CurPosCursor + 1];
 
@@ -344,34 +363,23 @@ namespace AdventOfCode2019
                 Console.WriteLine($" - Reletive Mode Offset {reletiveModeOffset - p1} to { reletiveModeOffset }");
             }
         }
+        #endregion
 
-        public long GetParameterValue(long param, ParameterMode mode)
-        {
-            switch (mode)
-            {
-                case ParameterMode.Positional:
-                    param = program[param];
-                    break;
-                case ParameterMode.Relative:
-                    param = program[param + reletiveModeOffset];
-                    break;
-                case ParameterMode.Immediate:
-                default:
-                    break;
-            }
-
-            return param;
-        }
-
-        public long GetParameterPosition(long param, ParameterMode mode)
-        {
-            if (mode == ParameterMode.Relative)
-            {
-                param += reletiveModeOffset;
-            }
-
-            return param;
-        }
+        #region Delegates
+        private readonly List<KeyValuePair<int, Delegate>> opLogging = new List<KeyValuePair<int, Delegate>>() {
+            new KeyValuePair<int, Delegate>(1, new Action<long, long, long, long,ParameterMode, ParameterMode, ParameterMode, bool>((DE, p1, p2, p3, p1m, p2m, p3m, isVerbose) => { var s = $"Op1 add: {DE}, {p1}({p1m}), {p2}({p2m}), {p3}({p3m})"; if (!isVerbose) Console.Write(s); else Console.WriteLine(s); }))
+            ,new KeyValuePair<int, Delegate>(2, new Action<long, long, long, long,ParameterMode, ParameterMode, ParameterMode, bool>((DE, p1, p2, p3, p1m, p2m, p3m, isVerbose) => {var s = $"Op2 Multiply: {DE}, {p1}({p1m}), {p2}({p2m}), {p3}({p3m})"; if (!isVerbose) Console.Write(s); else Console.WriteLine(s); }))
+            ,new KeyValuePair<int, Delegate>(3, new Action<long, long, long, long,ParameterMode, ParameterMode, ParameterMode, bool>((DE, p1, p2, p3, p1m, p2m, p3m, isVerbose) => {var s = $"Op3 input: {DE}, {p1}({p1m})"; if (!isVerbose) Console.Write(s); else Console.WriteLine(s); }))
+            ,new KeyValuePair<int, Delegate>(4, new Action<long, long, long, long,ParameterMode, ParameterMode, ParameterMode, bool>((DE, p1, p2, p3, p1m, p2m, p3m, isVerbose) => {var s = $"Op4 output: {DE}, {p1}({p1m})"; if (!isVerbose) Console.Write(s); else Console.WriteLine(s); }))
+            ,new KeyValuePair<int, Delegate>(5, new Action<long, long, long, long,ParameterMode, ParameterMode, ParameterMode, bool>((DE, p1, p2, p3, p1m, p2m, p3m, isVerbose) => {var s = $"Op5 jump if true: {DE}, {p1}({p1m}), {p2}({p2m})"; if (!isVerbose) Console.Write(s); else Console.WriteLine(s); }))
+            ,new KeyValuePair<int, Delegate>(6, new Action<long, long, long, long,ParameterMode, ParameterMode, ParameterMode, bool>((DE, p1, p2, p3, p1m, p2m, p3m, isVerbose) => {var s = $"Op6 jump if false: {DE}, {p1}({p1m}), {p2}({p2m})"; if (!isVerbose) Console.Write(s); else Console.WriteLine(s); }))
+            ,new KeyValuePair<int, Delegate>(7, new Action<long, long, long, long,ParameterMode, ParameterMode, ParameterMode, bool>((DE, p1, p2, p3, p1m, p2m, p3m, isVerbose) => {var s = $"Op7 less than: {DE}, {p1}({p1m}), {p2}({p2m}), {p3}({p3m})"; if (!isVerbose) Console.Write(s); else Console.WriteLine(s); }))
+            ,new KeyValuePair<int, Delegate>(8, new Action<long, long, long, long,ParameterMode, ParameterMode, ParameterMode, bool>((DE, p1, p2, p3, p1m, p2m, p3m, isVerbose) => {var s = $"Op8 is equal: {DE}, {p1}({p1m}), {p2}({p2m}), {p3}({p3m})"; if (!isVerbose) Console.Write(s); else Console.WriteLine(s); }))
+            ,new KeyValuePair<int, Delegate>(9, new Action<long, long, long, long,ParameterMode, ParameterMode, ParameterMode, bool>((DE, p1, p2, p3, p1m, p2m, p3m, isVerbose) => {var s = $"Op9 set offset: {DE}, {p1}({p1m})"; if (!isVerbose) Console.Write(s); else Console.WriteLine(s); }))
+            ,new KeyValuePair<int, Delegate>(99, new Action<long, long, long, long,ParameterMode, ParameterMode, ParameterMode, bool>((DE, p1, p2, p3, p1m, p2m, p3m, isVerbose) => {var s = $"Execution Halted Successfully"; if (!isVerbose) Console.Write(s); else Console.WriteLine(s); }))
+            ,new KeyValuePair<int, Delegate>(-1, new Action<long, long, long, long,ParameterMode, ParameterMode, ParameterMode, bool>((DE, p1, p2, p3, p1m, p2m, p3m, isVerbose) => {var s = $"Execution Halted Unexpectedly"; if (!isVerbose) Console.Write(s); else Console.WriteLine(s); }))
+        };
+        #endregion
 
         public IntCodeVM()
         {
