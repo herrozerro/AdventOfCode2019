@@ -87,6 +87,7 @@ namespace AdventOfCode2019
 				{
 					if (field[i, j] == '#')
 					{
+						//for breaking on a specific point
 						if (i == 2 && j == 2)
 						{
 							var s = 1;
@@ -98,11 +99,12 @@ namespace AdventOfCode2019
 
 						float slope = 0;
 
-						//just looking for slopes of 1
+						//Get slopes, and simplify for searching.
 						if (xslope != 0)
 						{
 							slope = (float)(coordy - i) / (coordx - j);
 
+							//Get if either x/y are negative
 							var xneg = false;
 							var yneg = false;
 							if (xslope < 0)
@@ -114,29 +116,26 @@ namespace AdventOfCode2019
 								yneg = true;
 							}
 
+							//Simplify
 							var n = Simplify(new int[] { Math.Abs(xslope), Math.Abs(yslope) });
+							xslope = n[0];
+							yslope = n[1];
 
+							//put negatives back
 							if (xneg)
 							{
-								xslope = n[0] * -1;
-							}
-							else
-							{
-								xslope = n[0];
+								xslope = xslope * -1;
 							}
 							if (yneg)
 							{
-								yslope = n[1] * -1;
-							}
-							else
-							{
-								yslope = n[1];
+								yslope = yslope * -1;
 							}
 
 						}
 
 						var k = 1;
 						bool foundRock = false;
+						//Search Entire slope from coords
 						while (true)
 						{
 							//get next search coord, starting point + slope * iteration
