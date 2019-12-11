@@ -36,9 +36,11 @@ namespace AdventOfCode2019
                 outputs.Clear();
                 CurPosCursor = 0;
             }
-
-            program = new long[program.Length + 10000];
-            programCode.CopyTo(program, 0);
+            if (program.Length == 0)
+            {
+                program = new long[program.Length + 10000];
+                programCode.CopyTo(program, 0);
+            }
 
             //CurrentPositionPointer = 0;
             bool isrunning = true;
@@ -127,7 +129,7 @@ namespace AdventOfCode2019
         int inputCursor = 0;
         long CurPosCursor = 0;
         long reletiveModeOffset = 0;
-        
+
         bool pauseOnOutput = false;
         #endregion
 
