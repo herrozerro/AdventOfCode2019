@@ -30,37 +30,16 @@ namespace AdventOfCode2019
 
             for (int i = 0; i < 1000; i++)
             {
-                //compare all moons for velocities
+                //Apply Gravity
                 foreach (var c in comparisonList)
                 {
                     var m1 = moons[c.Key, 0];
-                    var v1 = moons[c.Key, 1];
                     var m2 = moons[c.Value, 0];
-                    var v2 = moons[c.Value, 1];
 
-                    //x comparison
-                    if (m1.X != m2.X)
-                    {
-                        v1.X += m1.X < m2.X ? 1 : -1;
-                        v2.X += m2.X < m1.X ? 1 : -1;
-                    }
+                    var v1 = new Vector3(Math.Sign(m2.X - m1.X), Math.Sign(m2.Y - m1.Y), Math.Sign(m2.Z - m1.Z));
 
-                    //y comparison
-                    if (m1.Y != m2.Y)
-                    {
-                        v1.Y += m1.Y < m2.Y ? 1 : -1;
-                        v2.Y += m2.Y < m1.Y ? 1 : -1;
-                    }
-
-                    //z comparison
-                    if (m1.Z != m2.Z)
-                    {
-                        v1.Z += m1.Z < m2.Z ? 1 : -1;
-                        v2.Z += m2.Z < m1.Z ? 1 : -1;
-                    }
-
-                    moons[c.Key, 1] = v1;
-                    moons[c.Value, 1] = v2;
+                    moons[c.Key, 1] += v1;
+                    moons[c.Value, 1] += v1 * -1;
                 }
 
                 //Apply velocity
@@ -93,29 +72,12 @@ namespace AdventOfCode2019
                 { new Vector3(20,12,3), new Vector3(0,0,0) },
                 { new Vector3(0,-3,13), new Vector3(0,0,0) }
             };
-            //var moons2 = new Vector3[4, 2] {
-            //    { new Vector3(-1, 0, 2), new Vector3(0,0,0) },
-            //    { new Vector3(2, -10, -7), new Vector3(0,0,0) },
-            //    { new Vector3(4,-8,8), new Vector3(0,0,0) },
-            //    { new Vector3(3,5,-1), new Vector3(0,0,0) }
-            //};
 
-            //var moonsinit = new Vector3[4, 2] {
-            //    { new Vector3(-1, 0, 2), new Vector3(0,0,0) },
-            //    { new Vector3(2, -10, -7), new Vector3(0,0,0) },
-            //    { new Vector3(4,-8,8), new Vector3(0,0,0) },
-            //    { new Vector3(3,5,-1), new Vector3(0,0,0) }
-            //};
 
-            Int64 iter = 0;
-            Int64 m1o = 0;
-            Int64 m2o = 0;
-            Int64 m3o = 0;
-            Int64 m4o = 0;
-
-            Int64 xi = 0;
-            Int64 yi = 0;
-            Int64 zi = 0;
+            long iter = 0;
+            long xi = 0;
+            long yi = 0;
+            long zi = 0;
 
 
             while (true)
@@ -124,33 +86,12 @@ namespace AdventOfCode2019
                 foreach (var c in comparisonList)
                 {
                     var m1 = moons2[c.Key, 0];
-                    var v1 = moons2[c.Key, 1];
                     var m2 = moons2[c.Value, 0];
-                    var v2 = moons2[c.Value, 1];
 
-                    //x comparison
-                    if (m1.X != m2.X)
-                    {
-                        v1.X += m1.X < m2.X ? 1 : -1;
-                        v2.X += m2.X < m1.X ? 1 : -1;
-                    }
+                    var v1 = new Vector3(Math.Sign(m2.X - m1.X), Math.Sign(m2.Y - m1.Y), Math.Sign(m2.Z - m1.Z));
 
-                    //y comparison
-                    if (m1.Y != m2.Y)
-                    {
-                        v1.Y += m1.Y < m2.Y ? 1 : -1;
-                        v2.Y += m2.Y < m1.Y ? 1 : -1;
-                    }
-
-                    //z comparison
-                    if (m1.Z != m2.Z)
-                    {
-                        v1.Z += m1.Z < m2.Z ? 1 : -1;
-                        v2.Z += m2.Z < m1.Z ? 1 : -1;
-                    }
-
-                    moons2[c.Key, 1] = v1;
-                    moons2[c.Value, 1] = v2;
+                    moons2[c.Key, 1] += v1;
+                    moons2[c.Value, 1] += v1 *-1;
                 }
 
                 //Apply velocity
@@ -160,29 +101,7 @@ namespace AdventOfCode2019
                 }
                 iter++;
 
-
-
-                //if (moons2[0, 1] == new Vector3(0, 0, 0) && m1o == 0)
-                //{
-                //    m1o = iter;
-                //    Console.WriteLine(iter);
-                //}
-                //if (moons2[1, 1] == new Vector3(0, 0, 0) && m2o == 0)
-                //{
-                //    m2o = iter;
-                //    Console.WriteLine(iter);
-                //}
-                //if (moons2[2, 1] == new Vector3(0, 0, 0) && m3o == 0)
-                //{
-                //    m3o = iter;
-                //    Console.WriteLine(iter);
-                //}
-                //if (moons2[3, 1] == new Vector3(0, 0, 0) && m4o == 0)
-                //{
-                //    m4o = iter;
-                //    Console.WriteLine(iter);
-                //}
-
+                //get axis periods
                 if (moons2[0, 1].X == moonsinit[0, 1].X && moons2[1, 1].X == moonsinit[1, 1].X && moons2[2, 1].X == moonsinit[2, 1].X && moons2[3, 1].X == moonsinit[3, 1].X &&
                     moons2[0, 1].X == 0 && moons2[1, 1].X == 0 && moons2[2, 1].X == 0 && moons2[3, 1].X == 0)
                 {
@@ -205,18 +124,6 @@ namespace AdventOfCode2019
                 {
                     Console.WriteLine($"x {xi}, y {yi}, z{zi}");
                     Console.WriteLine(GetGCF(xi, GetGCF(yi,zi)));
-                    break;
-                }
-
-                //if (m1o > 0 && m2o > 0 && m3o > 0 && m4o > 0)
-                //{
-                //    Console.WriteLine(iter);
-                //}
-
-                if (moons2[0,1] == new Vector3(0,0,0) && moons2[1, 1] == new Vector3(0, 0, 0)
-                    && moons2[2, 1] == new Vector3(0, 0, 0) && moons2[3, 1] == new Vector3(0, 0, 0))
-                {
-                    Console.WriteLine(iter);
                     break;
                 }
             }
