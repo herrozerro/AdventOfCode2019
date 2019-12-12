@@ -87,11 +87,36 @@ namespace AdventOfCode2019
                 { new Vector3(0,-3,13), new Vector3(0,0,0) }
             };
 
+            var moonsinit = new Vector3[4, 2] {
+                { new Vector3(10, 15, 7), new Vector3(0,0,0) },
+                { new Vector3(15, 10, 0), new Vector3(0,0,0) },
+                { new Vector3(20,12,3), new Vector3(0,0,0) },
+                { new Vector3(0,-3,13), new Vector3(0,0,0) }
+            };
+            //var moons2 = new Vector3[4, 2] {
+            //    { new Vector3(-1, 0, 2), new Vector3(0,0,0) },
+            //    { new Vector3(2, -10, -7), new Vector3(0,0,0) },
+            //    { new Vector3(4,-8,8), new Vector3(0,0,0) },
+            //    { new Vector3(3,5,-1), new Vector3(0,0,0) }
+            //};
+
+            //var moonsinit = new Vector3[4, 2] {
+            //    { new Vector3(-1, 0, 2), new Vector3(0,0,0) },
+            //    { new Vector3(2, -10, -7), new Vector3(0,0,0) },
+            //    { new Vector3(4,-8,8), new Vector3(0,0,0) },
+            //    { new Vector3(3,5,-1), new Vector3(0,0,0) }
+            //};
+
             Int64 iter = 0;
             Int64 m1o = 0;
             Int64 m2o = 0;
             Int64 m3o = 0;
             Int64 m4o = 0;
+
+            Int64 xi = 0;
+            Int64 yi = 0;
+            Int64 zi = 0;
+
 
             while (true)
             {
@@ -137,25 +162,50 @@ namespace AdventOfCode2019
 
 
 
-                if (moons2[0, 1] == new Vector3(0, 0, 0) && m1o == 0)
+                //if (moons2[0, 1] == new Vector3(0, 0, 0) && m1o == 0)
+                //{
+                //    m1o = iter;
+                //    Console.WriteLine(iter);
+                //}
+                //if (moons2[1, 1] == new Vector3(0, 0, 0) && m2o == 0)
+                //{
+                //    m2o = iter;
+                //    Console.WriteLine(iter);
+                //}
+                //if (moons2[2, 1] == new Vector3(0, 0, 0) && m3o == 0)
+                //{
+                //    m3o = iter;
+                //    Console.WriteLine(iter);
+                //}
+                //if (moons2[3, 1] == new Vector3(0, 0, 0) && m4o == 0)
+                //{
+                //    m4o = iter;
+                //    Console.WriteLine(iter);
+                //}
+
+                if (moons2[0, 1].X == moonsinit[0, 1].X && moons2[1, 1].X == moonsinit[1, 1].X && moons2[2, 1].X == moonsinit[2, 1].X && moons2[3, 1].X == moonsinit[3, 1].X &&
+                    moons2[0, 1].X == 0 && moons2[1, 1].X == 0 && moons2[2, 1].X == 0 && moons2[3, 1].X == 0)
                 {
-                    m1o = iter;
-                    Console.WriteLine(iter);
+                    xi = iter;
                 }
-                if (moons2[1, 1] == new Vector3(0, 0, 0) && m2o == 0)
+
+                if (moons2[0, 1].Y == moonsinit[0, 1].Y && moons2[1, 1].Y == moonsinit[1, 1].Y && moons2[2, 1].Y == moonsinit[2, 1].Y && moons2[3, 1].Y == moonsinit[3, 1].Y &&
+                    moons2[0, 1].Y == 0 && moons2[1, 1].Y == 0 && moons2[2, 1].Y == 0 && moons2[3, 1].Y == 0)
                 {
-                    m2o = iter;
-                    Console.WriteLine(iter);
+                    yi = iter;
                 }
-                if (moons2[2, 1] == new Vector3(0, 0, 0) && m3o == 0)
+
+                if (moons2[0, 1].Z == moonsinit[0, 1].Z && moons2[1, 1].Z == moonsinit[1, 1].Z && moons2[2, 1].Z == moonsinit[2, 1].Z && moons2[3, 1].Z == moonsinit[3, 1].Z &&
+                    moons2[0, 1].Z == 0 && moons2[1, 1].Z == 0 && moons2[2, 1].Z == 0 && moons2[3, 1].Z == 0)
                 {
-                    m3o = iter;
-                    Console.WriteLine(iter);
+                    zi = iter;
                 }
-                if (moons2[3, 1] == new Vector3(0, 0, 0) && m4o == 0)
+
+                if (xi > 0 && yi > 0 && zi > 0)
                 {
-                    m4o = iter;
-                    Console.WriteLine(iter);
+                    Console.WriteLine($"x {xi}, y {yi}, z{zi}");
+                    Console.WriteLine(GetGCF(xi, GetGCF(yi,zi)));
+                    break;
                 }
 
                 //if (m1o > 0 && m2o > 0 && m3o > 0 && m4o > 0)
@@ -174,6 +224,19 @@ namespace AdventOfCode2019
 
             Console.WriteLine("**************");
             Console.WriteLine(Environment.NewLine);
+        }
+
+        static long GetGCF(long a, long b)
+        {
+            return (a * b) / GetGCD(a, b);
+        }
+
+        static long GetGCD(long a, long b)
+        {
+            while (a != b)
+                if (a < b) b = b - a;
+                else a = a - b;
+            return (a);
         }
     }
 }
