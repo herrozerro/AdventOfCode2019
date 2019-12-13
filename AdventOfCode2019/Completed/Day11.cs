@@ -22,7 +22,7 @@ namespace AdventOfCode2019
             var code = Utilities.GetStringFromFile("Day11.txt").SplitLongArrayFromString(',');
             var paintedPoints = new List<string>();
 
-            var vm = new IntCodeVM(new IntCodeVMConfiguration() {});
+            var vm = new IntCodeVMOLD(new IntCodeVMConfiguration() {});
             var grid = new int[100, 100];
             var curPos = new int[2] { 50, 50 };
             var currentColor = 0;

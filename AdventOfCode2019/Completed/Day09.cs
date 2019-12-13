@@ -23,7 +23,7 @@ namespace AdventOfCode2019
 
             var config = new IntCodeVMConfiguration();
             //config = new IntCodeVMConfiguration { Logging = true, FriendlyLogging = false };
-            var vm = new IntCodeVM(config);
+            var vm = new IntCodeVMOLD(config);
 
             vm.RunProgram(lines, new long[] { 1 });
 
@@ -36,7 +36,7 @@ namespace AdventOfCode2019
             var config = new IntCodeVMConfiguration();
             //config = new IntCodeVMConfiguration { Logging = true, FriendlyLogging = false };
 
-            var vm = new IntCodeVM(config);
+            var vm = new IntCodeVMOLD(config);
 
             vm.RunProgram(lines, new long[] { 2 });
 

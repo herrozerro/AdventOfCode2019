@@ -5,11 +5,10 @@ using System.Text;
 
 namespace AdventOfCode2019
 {
-    public class IntCodeVM
+    public class IntCodeVMOLD
     {
-        private long[] program = new long[100000000];
-        private int programLength = 0;
-        private Queue<long> inputs = new Queue<long>();
+        private long[] program = new long[0];
+        private long[] inputs;
 
         #region Public Access
         public Queue<long> outputs = new Queue<long>();
@@ -17,7 +16,7 @@ namespace AdventOfCode2019
         {
             get { return program; }
         }
-        public Queue<long> programInputs
+        public long[] programInputs
         {
             get { return inputs; }
         }
@@ -25,38 +24,37 @@ namespace AdventOfCode2019
 
         IntCodeVMConfiguration config;
 
-        public void Reset()
+        public int RunProgram(long[] programCode, long[] input, bool pauseOnOutput = false, bool resetVM = false, bool restartCursor = false)
         {
             inputCursor = 0;
-            outputs.Clear();
-            CurPosCursor = 0;
-            program = new long[0];
-        }
+            this.inputs = input;
+            this.pauseOnOutput = pauseOnOutput;
 
-        public void WriteProgram(long[] program)
-        {
-            programLength = program.Length;
-            program.CopyTo(this.program, 0);
-        }
+            if (resetVM)
+            {
+                inputCursor = 0;
+                outputs.Clear();
+                CurPosCursor = 0;
+                program = new long[0];
+            }
+            if (program.Length == 0)
+            {
+                program = new long[program.Length + 10000];
+                programCode.CopyTo(program, 0);
+                program[programCode.Length] = 2;
+            }
+            if (restartCursor)
+            {
+                CurPosCursor = 0;
+            }
 
-        public void WriteMemory(int pos, long value)
-        {
-            program[pos] = value;
-        }
-
-        public void WriteInput(long inp)
-        {
-            inputs.Enqueue(inp);
-        }
-
-        public HALTTYPE RunProgram()
-        {
-            CurPosCursor = 0;
             //CurrentPositionPointer = 0;
             bool isrunning = true;
             while (isrunning)
             {
-                parseOpCode();
+                var x = program[CurPosCursor];
+
+                parseOpCode(x);
 
                 if (config.Logging)
                 {
@@ -83,14 +81,15 @@ namespace AdventOfCode2019
                         Op2();
                         break;
                     case 3:
-                        if (inputs.Count == 0)
-                        {
-                            return HALTTYPE.HALT_WAITING;
-                        }
                         Op3();
                         break;
                     case 4:
                         Op4();
+                        if (pauseOnOutput)
+                        {
+                            isrunning = false;
+                            return 0;
+                        }
                         break;
                     case 5:
                         Op5();
@@ -108,16 +107,17 @@ namespace AdventOfCode2019
                         Op9();
                         break;
                     case 99:
-                        Console.WriteLine("Program Halted Expectedly");
+                        //Console.WriteLine("Program Halted Expectedly");
                         isrunning = false;
-                        return HALTTYPE.HALT_EXEPECTED;
+                        break;
                     default:
                         Console.WriteLine("Program Halted Unexpectedly");
                         isrunning = false;
-                        return HALTTYPE.HALT_UNEXPECTED;
+                        break;
                 }
             }
-            return HALTTYPE.HALT_EXEPECTED;
+
+            return 1;
         }
 
         #region State Items
@@ -140,9 +140,8 @@ namespace AdventOfCode2019
         #endregion
 
         #region State Methods
-        private void parseOpCode()
+        private void parseOpCode(long opCode)
         {
-            var opCode = program[CurPosCursor];
             A_ThirdParamMode = (ParameterMode)(opCode / 10000 % 1000 % 100 % 10); //A mode
             B_SecondParamMode = (ParameterMode)(opCode / 1000 % 100 % 10);         //B mode
             C_FirstParamMode = (ParameterMode)(opCode / 100 % 10);                //C mode
@@ -233,11 +232,11 @@ namespace AdventOfCode2019
 
             p1 = GetParameterPosition(p1, C_FirstParamMode);
 
-            program[p1] = inputs.Dequeue();
+            program[p1] = inputs[inputCursor];
 
             if (config.FriendlyLogging || config.Logging)
             {
-                Console.WriteLine($" - Input {program[p1]} stored into program[{p1}]");
+                Console.WriteLine($" - Input {inputs[inputCursor]} stored into program[{p1}]");
             }
 
             inputCursor++;
@@ -390,21 +389,28 @@ namespace AdventOfCode2019
         };
         #endregion
 
-        public IntCodeVM()
+        public IntCodeVMOLD()
         {
             config = new IntCodeVMConfiguration();
         }
 
-        public IntCodeVM(IntCodeVMConfiguration config)
+        public IntCodeVMOLD(IntCodeVMConfiguration config)
         {
             this.config = config;
         }
     }
 
-    public enum HALTTYPE
+    public enum ParameterMode
     {
-        HALT_WAITING = 0,
-        HALT_EXEPECTED = 1,
-        HALT_UNEXPECTED = -1
+        Positional = 0,
+        Immediate = 1,
+        Relative = 2
+    }
+
+    public class IntCodeVMConfiguration
+    {
+        public bool Logging = false;
+        public bool VerboseLogging = false;
+        public bool FriendlyLogging = false;
     }
 }

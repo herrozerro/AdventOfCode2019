@@ -15,7 +15,7 @@ namespace AdventOfCode2019Tests
         public void Part1()
         {
             var lines = new long[]{ 109, 1, 204, -1, 1001, 100, 1, 100, 1008, 100, 16, 101, 1006, 101, 0, 99 };
-            var vm = new IntCodeVM();
+            var vm = new IntCodeVMOLD();
             vm.RunProgram(lines, new long[] { 0 });
             Assert.IsTrue(vm.outputs.ToArray().SequenceEqual(lines));
 

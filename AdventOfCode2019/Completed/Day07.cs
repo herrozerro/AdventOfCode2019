@@ -36,7 +36,7 @@ namespace AdventOfCode2019
                         .ToArray();
                     var code = Utilities.GetStringFromFile("Day7.txt").SplitLongArrayFromString(',');
                     //var code = new int[] { 3, 15, 3, 16, 1002, 16, 10, 16, 1, 16, 15, 15, 4, 15, 99, 0, 0 };
-                    var amp = new IntCodeVM();
+                    var amp = new IntCodeVMOLD();
                     amp.RunProgram(code, new long[] { phasesettings[i], output });
                     output = amp.outputs.Last();
                     outputs.Add(output);
@@ -68,11 +68,11 @@ namespace AdventOfCode2019
                         .Select(x => long.Parse(x.ToString()))
                         .ToArray();
                 //phasesettings = new int[] { 9, 8, 7, 6, 5 };
-                var amp1 = new IntCodeVM();
-                var amp2 = new IntCodeVM();
-                var amp3 = new IntCodeVM();
-                var amp4 = new IntCodeVM();
-                var amp5 = new IntCodeVM();
+                var amp1 = new IntCodeVMOLD();
+                var amp2 = new IntCodeVMOLD();
+                var amp3 = new IntCodeVMOLD();
+                var amp4 = new IntCodeVMOLD();
+                var amp5 = new IntCodeVMOLD();
 
                 var code1 = Utilities.GetStringFromFile("Day7.txt").SplitLongArrayFromString(',');
                 var code2 = Utilities.GetStringFromFile("Day7.txt").SplitLongArrayFromString(',');
