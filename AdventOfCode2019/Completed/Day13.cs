@@ -79,7 +79,7 @@ namespace AdventOfCode2019
                     vm.WriteInput(0);
                 }
                 Draw(grid);
-                Thread.Sleep(5);
+                
                 if (blockcount == 0)
                 {
                     break;
@@ -139,7 +139,7 @@ namespace AdventOfCode2019
 
         static void Draw(char[,] grid)
         {
-            Console.Clear();
+            //Console.Clear();
             for (int i = 0; i < grid.GetLength(1); i++)
             {
                 var row = "";
@@ -149,7 +149,8 @@ namespace AdventOfCode2019
                 }
                 Console.WriteLine(row);
             }
-            Console.WriteLine($"Score: {score} ---- Blockes Remaining: {blockcount}");
+            Thread.Sleep(100);
+            //Console.WriteLine($"Score: {score} ---- Blockes Remaining: {blockcount}");
         }
     }
 }

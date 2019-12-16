@@ -19,9 +19,9 @@ namespace AdventOfCode2019
             //Day10.RunDay();
             //Day11.RunDay();
             //Day12.RunDay();
-            Day13.RunDay();
+            //Day13.RunDay();
             //Day14.RunDay();
-            //Day15.RunDay();
+            Day15.RunDay();
             //Day16.RunDay();
             //Day17.RunDay();
             //Day18.RunDay();
