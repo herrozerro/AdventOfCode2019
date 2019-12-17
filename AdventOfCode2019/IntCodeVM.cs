@@ -7,7 +7,7 @@ namespace AdventOfCode2019
 {
     public class IntCodeVM
     {
-        private long[] program = new long[100000000];
+        private long[] program = new long[1000000000];
         private int programLength = 0;
         private Queue<long> inputs = new Queue<long>();
 
@@ -51,7 +51,7 @@ namespace AdventOfCode2019
 
         public HALTTYPE RunProgram()
         {
-            CurPosCursor = 0;
+            //CurPosCursor = 0;
             //CurrentPositionPointer = 0;
             bool isrunning = true;
             while (isrunning)
@@ -405,6 +405,7 @@ namespace AdventOfCode2019
     {
         HALT_WAITING = 0,
         HALT_EXEPECTED = 1,
-        HALT_UNEXPECTED = -1
+        HALT_UNEXPECTED = -1,
+        HALT_OUTPUT = 2
     }
 }
