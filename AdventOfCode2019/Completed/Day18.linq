@@ -8,24 +8,51 @@ void Main()
 
 	var targets = GetTargets(map).Dump();
 
-	var dLoc = new int[2] { 1, 39 };
-	var fLoc = new int[2] { 3, 63 };
-	var Center = new int[2] { 40, 40 };
 
-	var hunter = new seeker(dLoc, 0, GetMap(), Center, Facing.north, GetDoors());
-	var result = hunter.Seek().Dump();
+	var results = new List<AllNodes>();
+	//var dLoc = new int[2] { 1, 39 };
+	//var fLoc = new int[2] { 3, 63 };
+	//var Center = new int[2] { 40, 40 };
+
+	for (int i = 0; i < targets.Count(); i++)
+	{
+		var s = targets[i];
+		var sLoc = s.Value;
+		for (int j = i + 1; j < targets.Count(); j++)
+		{
+			var t = targets[j];
+			var tLoc = t.Value;
+
+			var hunter = new seeker(tLoc, 0, GetMap(), sLoc, Facing.north, GetDoors());
+
+			var result = hunter.Seek();
+
+			results.Add(new AllNodes()
+			{
+				nodea = targets[i].Key,
+				nodeb = targets[j].Key,
+				DoorsBlocking = result.DoorsInWay.ToArray(),
+				steps = result.Steps
+			});
+		}
+	}
+
+
+	results.Dump();
+	//var hunter = new seeker(dLoc, 0, GetMap(), Center, Facing.north, GetDoors());
+	//var result = hunter.Seek().Dump();
 	//hunter.grid.Dump();
 	//hunter.doorsInWay.Dump();
 
-	var hunter2 = new seeker(Center, 0, GetMap(), dLoc, Facing.south, GetDoors());
-	var result2 = hunter2.Seek().Dump();
+	//var hunter2 = new seeker(Center, 0, GetMap(), dLoc, Facing.south, GetDoors());
+	//var result2 = hunter2.Seek().Dump();
 	//hunter2.grid.Dump();
 	//hunter2.doorsInWay.Dump();
 
-	foreach (var sp in result.StepPath)
-	{
-		map[sp.Key, sp.Value] = 'x';
-	}
+	//foreach (var sp in result.StepPath)
+	//{
+	//	map[sp.Key, sp.Value] = 'x';
+	//}
 
 	map.Dump();
 }
@@ -36,8 +63,9 @@ class AllNodes
 	public char nodeb { get; set; }
 	public int steps { get; set; }
 	public char[] DoorsBlocking { get; set; }
-	
-	public bool IsValid(List<char> keys){
+
+	public bool IsValid(List<char> keys)
+	{
 		var haskeys = DoorsBlocking.All(db => keys.Contains(db.ToString().ToLower()[0]));
 		return haskeys;
 	}
@@ -52,11 +80,10 @@ public char[] GetKeys()
 	return "abcdefghijklmnopqrstuvwxyz@".ToArray();
 }
 
-Dictionary<char, int[]> GetTargets(char[,] map)
+List<KeyValuePair<char, int[]>> GetTargets(char[,] map)
 {
-	Dictionary<char, int[]> targets = new Dictionary<char, int[]>();
+	List<KeyValuePair<char, int[]>> targets = new List<KeyValuePair<char, int[]>>();
 	var keys = GetKeys();
-
 
 	for (int i = 0; i < map.GetLength(0); i++)
 	{
@@ -64,7 +91,7 @@ Dictionary<char, int[]> GetTargets(char[,] map)
 		{
 			if (keys.Contains(map[i, j]))
 			{
-				targets.Add(map[i, j], new int[] { i, j });
+				targets.Add(new KeyValuePair<char, int[]>(map[i, j], new int[] { i, j }));
 			}
 		}
 	}
@@ -261,6 +288,7 @@ public class seeker
 		var nextPos = new int[2];
 		CurrentPos.CopyTo(nextPos, 0);
 
+
 		switch (f)
 		{
 			case Facing.north:
@@ -278,6 +306,7 @@ public class seeker
 			default:
 				break;
 		}
+
 
 		var charAtPosition = grid[nextPos[0], nextPos[1]];
 
@@ -297,24 +326,26 @@ public class seeker
 		fls.Add(Facing.west);
 		fls.Add(Facing.north);
 
-		switch (currentFacing)
+		if (steps > 0)
 		{
-			case Facing.north:
-				fls.Remove(Facing.south);
-				break;
-			case Facing.south:
-				fls.Remove(Facing.north);
-				break;
-			case Facing.west:
-				fls.Remove(Facing.east);
-				break;
-			case Facing.east:
-				fls.Remove(Facing.west);
-				break;
-			default:
-				break;
+			switch (currentFacing)
+			{
+				case Facing.north:
+					fls.Remove(Facing.south);
+					break;
+				case Facing.south:
+					fls.Remove(Facing.north);
+					break;
+				case Facing.west:
+					fls.Remove(Facing.east);
+					break;
+				case Facing.east:
+					fls.Remove(Facing.west);
+					break;
+				default:
+					break;
+			}
 		}
-
 		var openFacing = new List<Facing>();
 
 		foreach (var f in fls)

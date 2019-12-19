@@ -30,7 +30,7 @@ namespace AdventOfCode2019
             inputCursor = 0;
             outputs.Clear();
             CurPosCursor = 0;
-            program = new long[0];
+            program = new long[1000000000];
         }
 
         public void WriteProgram(long[] program)
@@ -108,11 +108,11 @@ namespace AdventOfCode2019
                         Op9();
                         break;
                     case 99:
-                        Console.WriteLine("Program Halted Expectedly");
+                        //Console.WriteLine("Program Halted Expectedly");
                         isrunning = false;
                         return HALTTYPE.HALT_EXEPECTED;
                     default:
-                        Console.WriteLine("Program Halted Unexpectedly");
+                        //Console.WriteLine("Program Halted Unexpectedly");
                         isrunning = false;
                         return HALTTYPE.HALT_UNEXPECTED;
                 }
