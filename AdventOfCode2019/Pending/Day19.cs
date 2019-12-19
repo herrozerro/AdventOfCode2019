@@ -11,7 +11,7 @@ namespace AdventOfCode2019
         {
             Console.WriteLine("Day 19");
 
-           // P1();
+            // P1();
             P2();
 
             Console.WriteLine("**************");
@@ -54,7 +54,7 @@ namespace AdventOfCode2019
                     usedcoords.Enqueue(coord);
                 }
             }
-            
+
 
 
             long count = 0;
@@ -77,53 +77,97 @@ namespace AdventOfCode2019
             var vm = new IntCodeVM(new IntCodeVMConfiguration() { });
 
             var rows = 500;
-            char[,] charmap = new char[5000, 5000];
+            char[,] charmap = new char[1200, 1200];
 
             bool hitbeam = false;
-            long beamwidth = 0;
-            long BeamStart = 0;
+            int beamstart = 0;
+            int drawx = 0;
+            int drawy = 0;
 
-            for (int i = 4; i < 5000; i++)
+            for (int i = 4; i < 1200; i++)
             {
-                for (int j = 0; j < 5000; j++)
+                for (int j = 0; j < 1200; j++)
                 {
                     var output = CheckBeam(j, i);
                     if (output == 1)
                     {
+                        if (!hitbeam)
+                        {
+                            hitbeam = true;
+                            beamstart = j - 2;
+                        }
+                        
                         charmap[i, j] = '#';
                         //Draw(charmap);
 
                         //check if 99 up is valid
-                        if (i > 100)
-                        {
-                            output = CheckBeam(j, i - 100);
-                            if (output == 1)
-                            {
-                                if (CheckBeam(j+99, i - 100)==1)
-                                {
-                                    Console.Write($"{j} , {i - 100}");
-                                    return;
-                                }
-                                
-                            }
-                        }
-                        
+                        //if (i > 100)
+                        //{
+                        //    output = CheckBeam(j, i - 9);
+                        //    if (output == 1)
+                        //    {
+                        //        if (CheckBeam(j + 9, i - 9) == 1)
+                        //        {
+                        //            Draw(charmap, j - 5, i - 20, 12, 12);
+                        //            Console.Write($"{j} , {i - 10}");
+                        //            return;
+                        //        }
 
-
-                        i++;
-                        j--;
-                        continue;
+                        //    }
+                        //}
                     }
+                    else
+                    {
+                        if (hitbeam)
+                        {
+                            hitbeam = false;
+                            j = beamstart;
+                            i++;
+                            if (i == 1200)
+                            {
+                                break;
+                            }
+                            continue;
+                        }
+                    }
+
                 }
             }
+
+            string map = "";
+
+            for (int i = 0; i < charmap.GetLength(1); i++)
+            {
+                for (int j = 0; j < charmap.GetLength(0); j++)
+                {
+                    map += (charmap[j, i] == '\0' ? '.' : charmap[j, i]);
+                }
+                map += Environment.NewLine;
+            }
+
+
+            Console.WriteLine(map);
+            //for (int i = 101; i < 120; i++)
+            //{
+            //    for (int j = 70; j < 100; j++)
+            //    {
+            //        var output = CheckBeam(j, i);
+            //        if (output == 1)
+            //        {
+            //            charmap[i, j] = '#';
+            //        }
+            //    }
+            //}
+
+            //Draw(charmap, 101, 70, 20, 20);
         }
-        static void Draw(char[,] grid)
+        static void Draw(char[,] grid, int startx = 0, int starty = 0, int endy = 0, int endx = 0)
         {
             Console.Clear();
-            for (int i = 0; i < grid.GetLength(1); i++)
+            for (int i = starty; i < starty + (endy == 0 ? grid.GetLength(1) : endy); i++)
             {
                 var row = "";
-                for (int j = 0; j < grid.GetLength(0); j++)
+                for (int j = startx; j < starty + (endx == 0 ? grid.GetLength(0) : endx); j++)
                 {
                     row = row + (grid[j, i] == '\0' ? '.' : grid[j, i]);
                 }
@@ -138,7 +182,7 @@ namespace AdventOfCode2019
             var lines = Utilities.GetStringFromFile("Day19.txt").SplitLongArrayFromString(',');
 
             var vm = new IntCodeVM(new IntCodeVMConfiguration() { });
-            
+
             vm.WriteProgram(lines);
             while (vm.RunProgram() == HALTTYPE.HALT_WAITING)
             {
