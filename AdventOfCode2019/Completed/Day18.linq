@@ -6,24 +6,33 @@ void Main()
 {
 	var map = GetMap();
 
-	var targets = GetTargets(map).Dump();
-
+	var targets = GetTargets(map).ToList().Dump();
+	
+	
 
 	var results = new List<AllNodes>();
-	//var dLoc = new int[2] { 1, 39 };
+	var dLoc = new int[2] { 35, 37 };
 	//var fLoc = new int[2] { 3, 63 };
-	//var Center = new int[2] { 40, 40 };
+	var Center = new int[2] { 40, 40 };
 
 	for (int i = 0; i < targets.Count(); i++)
 	{
-		var s = targets[i];
-		var sLoc = s.Value;
 		for (int j = i + 1; j < targets.Count(); j++)
 		{
+			var s = targets[i];
+			int[] sLoc = new int[2];
+			s.Value.CopyTo(sLoc, 0);
 			var t = targets[j];
-			var tLoc = t.Value;
-
-			var hunter = new seeker(tLoc, 0, GetMap(), sLoc, Facing.north, GetDoors());
+			int[] tLoc = new int[2];
+			t.Value.CopyTo(tLoc, 0);
+			
+			var map2 = GetMap();
+			
+			
+			
+			//map2.Dump();
+			
+			var hunter = new seeker(tLoc, 0, map2, sLoc, Facing.north, GetDoors());
 
 			var result = hunter.Seek();
 
@@ -33,16 +42,20 @@ void Main()
 				nodeb = targets[j].Key,
 				DoorsBlocking = result.DoorsInWay.ToArray(),
 				steps = result.Steps
+				//stepPlaces = result.StepPath 
 			});
 		}
 	}
 
 
 	results.Dump();
-	//var hunter = new seeker(dLoc, 0, GetMap(), Center, Facing.north, GetDoors());
-	//var result = hunter.Seek().Dump();
-	//hunter.grid.Dump();
-	//hunter.doorsInWay.Dump();
+	
+	results.Where(r => r.nodea == 'm' && r.nodeb == '@').Dump();
+	//var hunter2 = new seeker(Center, 0, GetMap(), dLoc, Facing.north, GetDoors());
+	//var result2 = hunter2.Seek();
+	//hunter2.grid.Dump();
+	//hunter2.doorsInWay.Dump();
+	
 
 	//var hunter2 = new seeker(Center, 0, GetMap(), dLoc, Facing.south, GetDoors());
 	//var result2 = hunter2.Seek().Dump();
@@ -54,7 +67,7 @@ void Main()
 	//	map[sp.Key, sp.Value] = 'x';
 	//}
 
-	map.Dump();
+	//map.Dump();
 }
 
 class AllNodes
@@ -63,7 +76,8 @@ class AllNodes
 	public char nodeb { get; set; }
 	public int steps { get; set; }
 	public char[] DoorsBlocking { get; set; }
-
+	public List<KeyValuePair<int, int>> stepPlaces {get;set;}
+	
 	public bool IsValid(List<char> keys)
 	{
 		var haskeys = DoorsBlocking.All(db => keys.Contains(db.ToString().ToLower()[0]));

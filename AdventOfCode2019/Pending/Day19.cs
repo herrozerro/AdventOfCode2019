@@ -11,8 +11,8 @@ namespace AdventOfCode2019
         {
             Console.WriteLine("Day 19");
 
-            // P1();
-            P2();
+            P1();
+            //P2();
 
             Console.WriteLine("**************");
             Console.WriteLine(Environment.NewLine);
@@ -22,51 +22,67 @@ namespace AdventOfCode2019
         {
             var lines = Utilities.GetStringFromFile("Day19.txt").SplitLongArrayFromString(',');
 
-            var vm = new IntCodeVM(new IntCodeVMConfiguration() { });
-            vm.WriteProgram(lines);
+            
 
-            char[,] charmap = new char[50, 50];
+            char[,] charmap = new char[1200, 1200];
 
             Queue<KeyValuePair<int, int>> coords = new Queue<KeyValuePair<int, int>>();
 
             Queue<KeyValuePair<int, int>> usedcoords = new Queue<KeyValuePair<int, int>>();
 
-            for (int i = 0; i < 50; i++)
+            for (int i = 0; i < 1200; i++)
             {
-                for (int j = 0; j < 50; j++)
+                for (int j = 0; j < 1200; j++)
                 {
                     coords.Enqueue(new KeyValuePair<int, int>(i, j));
                 }
             }
-
+            Queue<long> outputs = new Queue<long>();
             while (coords.Count > 0)
             {
+                Console.WriteLine(coords.Count);
+                var vm = new IntCodeVM(new IntCodeVMConfiguration() { });
+                vm.WriteProgram(lines);
+                var coord = coords.Dequeue();
+                vm.WriteInput(coord.Key);
+                vm.WriteInput(coord.Value);
+                
                 while (vm.RunProgram() == HALTTYPE.HALT_WAITING)
                 {
-
                     if (coords.Count == 0)
                     {
                         break;
                     }
-                    var coord = coords.Dequeue();
-                    vm.WriteInput(coord.Key);
-                    vm.WriteInput(coord.Value);
-                    usedcoords.Enqueue(coord);
                 }
+                outputs.Enqueue(vm.outputs.Dequeue());
+                usedcoords.Enqueue(new KeyValuePair<int, int>(coord.Key, coord.Value));
             }
 
 
 
             long count = 0;
-            while (vm.outputs.Count > 0)
+            while (outputs.Count > 0)
             {
-                var output = vm.outputs.Dequeue();
+                var output = outputs.Dequeue();
                 var outcoord = usedcoords.Dequeue();
                 charmap[outcoord.Key, outcoord.Value] = output.ToString()[0];
                 count += output;
             }
 
+            Draw(charmap);
 
+            var strgen = new StringBuilder();
+
+            for (int i = 0; i < charmap.GetLength(0); i++)
+            {
+                for (int j = 0; j < charmap.GetLength(1); j++)
+                {
+                    strgen.Append(charmap[i, j]);
+                }
+                strgen.Append(Environment.NewLine);
+            }
+
+            var s = strgen.ToString();
 
         }
 

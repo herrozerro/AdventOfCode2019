@@ -7,7 +7,7 @@ namespace AdventOfCode2019
 {
     public class IntCodeVM
     {
-        private long[] program = new long[1000000000];
+        private long[] program = new long[1000];
         private int programLength = 0;
         private Queue<long> inputs = new Queue<long>();
 
