@@ -27,6 +27,11 @@ namespace AdventOfCode2019
 
             vm.RunProgram(lines, new long[] { 1 });
 
+            foreach (var item in vm.outputs)
+            {
+                Console.Write(Convert.ToChar(item));
+            }
+
             Console.WriteLine(vm.outputs.Peek());
         }
 

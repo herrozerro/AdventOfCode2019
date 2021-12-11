@@ -50,24 +50,7 @@ void Main()
 
 	results.Dump();
 	
-	results.Where(r => r.nodea == 'm' && r.nodeb == '@').Dump();
-	//var hunter2 = new seeker(Center, 0, GetMap(), dLoc, Facing.north, GetDoors());
-	//var result2 = hunter2.Seek();
-	//hunter2.grid.Dump();
-	//hunter2.doorsInWay.Dump();
-	
-
-	//var hunter2 = new seeker(Center, 0, GetMap(), dLoc, Facing.south, GetDoors());
-	//var result2 = hunter2.Seek().Dump();
-	//hunter2.grid.Dump();
-	//hunter2.doorsInWay.Dump();
-
-	//foreach (var sp in result.StepPath)
-	//{
-	//	map[sp.Key, sp.Value] = 'x';
-	//}
-
-	//map.Dump();
+	results.Where(r => r.nodea == 'm' && r.DoorsBlocking.Length == 0).Dump();
 }
 
 class AllNodes

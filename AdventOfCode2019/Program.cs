@@ -15,7 +15,7 @@ namespace AdventOfCode2019
             //Day06.RunDay();
             //Day07.RunDay();
             //Day08.RunDay();
-            //Day09.RunDay();
+            Day09.RunDay();
             //Day10.RunDay();
             //Day11.RunDay();
             //Day12.RunDay();
@@ -25,7 +25,7 @@ namespace AdventOfCode2019
             //Day16.RunDay();
             //Day17.RunDay();
             //Day18.RunDay();
-            Day19.RunDay();
+            //Day19.RunDay();
             //Day20.RunDay();
             //Day21.RunDay();
             //Day22.RunDay();
